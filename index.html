@@ -165,8 +165,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
         <div class="field" style="margin-bottom:0">
           <label for="pay">Método de pago</label>
           <select id="pay">
-            <option>Oxxo Efectivo</option>
-            <option>Transferencia (solo para pedidos en WhatsApp)</option>
+            <option>Transferencia bancaria MX</option>
           </select>
           <div class="paypanel" id="payPanel"></div>
         </div>
@@ -207,7 +206,7 @@ var WHATSAPP   = "528911313903"; // tu número con código de país, sin + ni es
 var GAME = "Free Fire";
 var PAYPAL_ME = "https://paypal.me/TU_USUARIO";     // tu link de PayPal.me (sin monto)
 var MP_LINK   = "https://link.mercadopago.com.mx/7venstore"; // tu link de cobro de Mercado Pago
-var QR_URL    = "";                                 // URL de la imagen del QR de depósito OXXO
+var QR_URL    = "qr-oxxo.jpg";                               // URL de la imagen del QR de depósito OXXO
 var SUPABASE_URL = "https://gspwhmueszdaytwqsiqi.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcHdobXVlc3pkYXl0d3FzaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjI1ODMsImV4cCI6MjEwODI5ODU4M30.L9vHkvWL-RIgtrfU6bpA18IB6DdaelqRgApwj6IQ238";
 var currentUser = null;
@@ -250,9 +249,9 @@ function renderPay(k, ok){
     return;
   }
   var m = pay.value, box = document.getElementById("payPanel"), html = "";
-  if (m === "Oxxo Efectivo"){
-    html = '<b>Depósito en OXXO</b><br>Escanea el QR en tu depósito y manda tu comprobante por WhatsApp.' +
-      (QR_URL ? '<img src="' + QR_URL + '" alt="QR de depósito" style="display:block;width:100%;max-width:240px;margin:10px auto 0;border-radius:12px">' : '<br><i>QR próximamente.</i>');
+  if (m === "Transferencia bancaria MX"){
+    html = '<b>Transferencia bancaria MX</b><br>Cuenta / CLABE: <b>722969010405445129</b><br>Titular: Henry Barcenas<br>Banco: Mercado Pago W' +
+      '<div style="margin-top:8px;color:var(--muted)">Después de transferir, manda tu comprobante por WhatsApp.</div>';
   } else if (m === "Tarjeta Credito o Debito"){
     html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
   } else if (m === "Mercado pago"){
@@ -274,7 +273,7 @@ function update(){
   if (id && !ok){ hint.textContent = "El ID debe tener solo números (entre 7 y 13 dígitos)."; hint.className = "hint err"; }
   else { hint.textContent = "Lo ves en tu perfil dentro de Free Fire."; hint.className = "hint"; }
   pid.classList.toggle("bad", id !== "" && !ok);
-  var msg = "Hola, quiero " + k.d + " diamantes + " + k.b + " de bono de " + GAME + " (" + money(k.p) + " MXN). ID de jugador: " + id + ". Método de pago: " + pay.value + ".";
+  var msg = "Hola hize pedido en la pagina\n" + k.d + " diamantes + " + k.b + " bono - " + money(k.p) + " MXN\n" + (id || "") + "\n" + pay.value;
   wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
   var isWa = pay.value.indexOf("Transferencia") === 0;
   wa.style.display = isWa ? "block" : "none";
