@@ -192,7 +192,8 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
     <details><summary>¿Cuánto tarda la recarga?</summary><p>Las recargas se realizan de 1 a 2 minutos.</p></details>
     <details><summary>¿Dónde encuentro mi ID?</summary><p>Abre Free Fire y entra a tu perfil. El número aparece junto a tu nombre de jugador.</p></details>
   </section>
-  <section class="box" id="historial" style="margin-bottom:22px">
+  <section class="box" id="historial" hidden style="margin-bottom:22px">
+    <button type="button" class="back-link" data-back="1" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
     <h2>Historial de recargas</h2>
     <div id="histList">Inicia sesión para ver tus recargas.</div>
   </section>
@@ -322,12 +323,13 @@ loginBtn.addEventListener("click", function(){
 });
 var balBtn = document.getElementById("balBtn");
 function goView(v){
-  var isR = v === "recargar";
+  var subViews = ["recargar", "historial"];
   Array.prototype.forEach.call(document.querySelectorAll("main > *"), function(el){
-    if (el.id === "recargar" || el.id === "authBox") return;
-    el.style.display = isR ? "none" : "";
+    if (el.id === "authBox") return;
+    if (subViews.indexOf(el.id) !== -1){ el.hidden = el.id !== v; return; }
+    el.style.display = v === "tienda" ? "" : "none";
   });
-  document.getElementById("recargar").hidden = !isR;
+  if (v === "historial") loadHistory();
   window.scrollTo(0, 0);
 }
 balBtn.addEventListener("click", function(){ goView("recargar"); });
@@ -338,9 +340,13 @@ function closeMenu(){
 document.getElementById("menuSaldo").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); goView("recargar"); });
 document.getElementById("menuLogout").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); sb.auth.signOut(); });
 Array.prototype.forEach.call(document.querySelectorAll('#menu a[href="#paquetes"], #menu a[href="#historial"]'), function(a){
-  a.addEventListener("click", function(){ closeMenu(); goView("tienda"); });
+  a.addEventListener("click", function(){
+    closeMenu();
+    goView(a.getAttribute("href") === "#historial" ? "historial" : "tienda");
+  });
 });
 document.getElementById("recBack").addEventListener("click", function(){ goView("tienda"); });
+document.querySelector('#historial [data-back="1"]').addEventListener("click", function(){ goView("tienda"); });
 document.getElementById("recAmt").addEventListener("input", function(){
   var amt = parseInt(this.value, 10);
   var user = currentUser ? currentUser.email.split("@")[0] : "";
