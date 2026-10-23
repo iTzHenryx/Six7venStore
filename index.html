@@ -433,11 +433,30 @@ function payWithBalance(btn){
   var k = PACKS[sel], id = pid.value.trim(), box = document.getElementById("payPanel");
   if (!currentUser || !validId(id)) return;
   btn.disabled = true;
-  sb.rpc("comprar_con_saldo", { p_diamonds: k.d, p_bonus: k.b, p_price: k.p, p_player_id: id }).then(function(r){
-    if (r.error){ box.innerHTML = '<b>No se pudo pagar:</b> ' + r.error.message; return; }
-    box.innerHTML = '<b style="color:#22c55e;font-size:18px">Recarga Exitosa (' + k.d + ' diamantes)</b><br><span style="color:#22c55e">Su pedido se guardó en su historial.</span>';
+  box.innerHTML = '<b>Procesando tu pedido...</b>';
+  sb.auth.getSession().then(function(s){
+    var token = s.data.session ? s.data.session.access_token : "";
+    return fetch(SUPABASE_URL + "/functions/v1/comprar-recarga", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY },
+      body: JSON.stringify({ diamonds: k.d, player_id: id })
+    });
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if (!j.ok){
+      box.innerHTML = '<b style="color:#ef4444">No se pudo pagar:</b> ' + (j.error || "Intenta de nuevo.");
+      btn.disabled = false;
+      return;
+    }
+    if (j.status === "en revisión"){
+      box.innerHTML = '<b style="color:#eab308;font-size:18px">Pedido en revisión</b><br><span style="color:#eab308">' + (j.message || "Te confirmamos por WhatsApp.") + '</span>';
+    } else {
+      box.innerHTML = '<b style="color:#22c55e;font-size:18px">Recarga Exitosa (' + k.d + ' diamantes)</b><br><span style="color:#22c55e">Su pedido se guardó en su historial.</span>';
+    }
     loadBalance();
     loadHistory();
+  }).catch(function(){
+    box.innerHTML = '<b style="color:#ef4444">Error de conexión.</b> Revisa tu historial antes de volver a intentar.';
+    btn.disabled = false;
   });
 }
 
