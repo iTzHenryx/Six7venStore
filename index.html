@@ -137,10 +137,11 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
 
 <main class="wrap">
   <div class="box" id="authBox" style="margin-bottom:22px">
-    <h2>Inicia sesión</h2>
-    <div class="field"><label for="email">Correo</label><input id="email" type="email" placeholder="tu@correo.com"></div>
-    <button class="paybtn" id="sendLink" style="width:100%;border:0;font:inherit;cursor:pointer">Enviarme enlace al correo</button>
-    <button class="paybtn" id="gBtn" style="width:100%;border:0;font:inherit;cursor:pointer;background:#ffffff">Continuar con Google</button>
+    <h2 id="authTitle">Inicia sesión</h2>
+    <div class="field"><label for="user">Usuario</label><input id="user" type="text" autocomplete="username" placeholder="tu_usuario"></div>
+    <div class="field"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" placeholder="mínimo 6 caracteres"></div>
+    <button class="paybtn" id="authGo" style="width:100%;border:0;font:inherit;cursor:pointer">Entrar</button>
+    <button id="authSwitch" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;margin-top:12px;font:inherit">¿No tienes cuenta? Crear cuenta</button>
     <div class="hint" id="authMsg"></div>
   </div>
   <form id="orderForm" onsubmit="return false" novalidate>
@@ -307,19 +308,34 @@ loginBtn.addEventListener("click", function(){
   if (currentUser){ sb.auth.signOut(); return; }
   authBox.hidden = false;
 });
-document.getElementById("sendLink").addEventListener("click", function(){
-  var em = document.getElementById("email").value.trim();
+var authMode = "login";
+document.getElementById("authSwitch").addEventListener("click", function(){
+  authMode = authMode === "login" ? "signup" : "login";
+  document.getElementById("authTitle").textContent = authMode === "login" ? "Inicia sesión" : "Crear cuenta";
+  document.getElementById("authGo").textContent = authMode === "login" ? "Entrar" : "Crear cuenta";
+  this.textContent = authMode === "login" ? "¿No tienes cuenta? Crear cuenta" : "¿Ya tienes cuenta? Inicia sesión";
+  document.getElementById("authMsg").textContent = "";
+});
+document.getElementById("authGo").addEventListener("click", function(){
+  var u = document.getElementById("user").value.trim().toLowerCase();
+  var p = document.getElementById("pass").value;
   var msg = document.getElementById("authMsg");
-  if (!/^\S+@\S+\.\S+$/.test(em)){ msg.textContent = "Escribe un correo válido."; return; }
-  sb.auth.signInWithOtp({ email: em, options: { emailRedirectTo: location.href } }).then(function(r){
-    msg.textContent = r.error ? "No se pudo enviar: " + r.error.message : "Revisa tu correo y abre el enlace.";
+  if (!/^[a-z0-9_]{3,20}$/.test(u)){ msg.textContent = "Usuario: de 3 a 20 letras, números o guion bajo."; return; }
+  if (p.length < 6){ msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
+  var email = u + "@six7venstore.com";
+  var req = authMode === "login"
+    ? sb.auth.signInWithPassword({ email: email, password: p })
+    : sb.auth.signUp({ email: email, password: p });
+  req.then(function(r){
+    if (r.error){
+      msg.textContent = r.error.message === "Invalid login credentials"
+        ? "Usuario o contraseña incorrectos."
+        : "No se pudo: " + r.error.message;
+      return;
+    }
+    msg.textContent = "";
+    if (authMode === "signup" && !r.data.session){ msg.textContent = "Cuenta creada. Ahora inicia sesión."; }
   });
-});
-document.getElementById("gBtn").addEventListener("click", function(){
-  sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.href } });
-});
-document.getElementById("aBtn").addEventListener("click", function(){
-  sb.auth.signInWithOAuth({ provider: "apple", options: { redirectTo: location.href } });
 });
 
 sb.auth.onAuthStateChange(function(_event, session){
