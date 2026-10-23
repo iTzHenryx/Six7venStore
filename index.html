@@ -166,7 +166,6 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
           <label for="pay">Método de pago</label>
           <select id="pay">
             <option>Oxxo Efectivo</option>
-            <option>Paypal</option>
             <option>Transferencia (solo para pedidos en WhatsApp)</option>
           </select>
           <div class="paypanel" id="payPanel"></div>
@@ -256,8 +255,6 @@ function renderPay(k, ok){
       (QR_URL ? '<img src="' + QR_URL + '" alt="QR de depósito" style="display:block;width:100%;max-width:240px;margin:10px auto 0;border-radius:12px">' : '<br><i>QR próximamente.</i>');
   } else if (m === "Tarjeta Credito o Debito"){
     html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
-  } else if (m === "Paypal"){
-    html = '<b>Pago con PayPal</b><a class="paybtn" href="' + PAYPAL_ME + '/' + k.p + 'MXN" target="_blank" rel="noopener">Pagar $' + k.p + ' MXN con PayPal</a>';
   } else if (m === "Mercado pago"){
     html = '<b>Pago con Mercado Pago</b><a class="paybtn" href="' + MP_LINK + '" target="_blank" rel="noopener">Pagar con Mercado Pago</a><div style="margin-top:8px;color:var(--muted)">Confirma el monto del paquete por WhatsApp.</div>';
   }
