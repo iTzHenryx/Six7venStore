@@ -168,6 +168,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
         <div class="field" style="margin-bottom:0">
           <label for="pay">Método de pago</label>
           <select id="pay">
+            <option>Saldo</option>
             <option>Transferencia bancaria MX</option>
           </select>
           <div class="paypanel" id="payPanel"></div>
@@ -269,6 +270,12 @@ function renderPay(k, ok){
       'Cuenta / CLABE:<br><b style="font-size:22px;letter-spacing:1px;word-break:break-all">722969010405445129</b><br>' +
       'Titular: <b>Henry Barcenas</b><br>Banco: <b>Mercado Pago W</b></div>' +
       '<div style="margin-top:10px;font-size:16px;color:var(--muted)">Después de transferir, manda tu comprobante por WhatsApp.</div>';
+  } else if (m === "Saldo"){
+    var enough = myBalance !== null && myBalance >= k.p;
+    html = '<b>Pagar con saldo</b><br>Tu saldo: <b>$' + (myBalance === null ? "0" : myBalance) + ' MXN</b>' +
+      (enough
+        ? '<button class="balpay" id="payBalBtn" type="button" style="width:100%;border:0;font:inherit;cursor:pointer;padding:12px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:700;margin-top:10px">Pagar $' + k.p + ' MXN con saldo</button>'
+        : '<br><i>Saldo insuficiente. Recárgalo desde el menú, en Saldo.</i>');
   } else if (m === "Tarjeta Credito o Debito"){
     html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
   } else if (m === "Mercado pago"){
@@ -392,11 +399,9 @@ sb.auth.onAuthStateChange(function(_event, session){
   document.getElementById("menuSaldo").hidden = !currentUser;
   document.getElementById("menuLogout").hidden = !currentUser;
   if (!currentUser) goView("tienda");
-  document.getElementById("recSaldo").textContent = "0";
-  document.getElementById("balAmt").textContent = "$0";
   document.body.classList.toggle("locked", !currentUser);
   loadHistory();
-  update();
+  loadBalance(update);
 });
 
 function loadHistory(){
@@ -411,6 +416,31 @@ function loadHistory(){
   });
 }
 
+var myBalance = null;
+function setBal(v){
+  document.getElementById("balAmt").textContent = "$" + v;
+  document.getElementById("recSaldo").textContent = v;
+}
+function loadBalance(done){
+  if (!currentUser){ myBalance = null; setBal(0); if (done) done(); return; }
+  sb.from("balances").select("amount").eq("user_id", currentUser.id).maybeSingle().then(function(r){
+    myBalance = (!r.error && r.data) ? Number(r.data.amount) : 0;
+    setBal(myBalance);
+    if (done) done();
+  });
+}
+function payWithBalance(btn){
+  var k = PACKS[sel], id = pid.value.trim(), box = document.getElementById("payPanel");
+  if (!currentUser || !validId(id)) return;
+  btn.disabled = true;
+  sb.rpc("comprar_con_saldo", { p_diamonds: k.d, p_bonus: k.b, p_price: k.p, p_player_id: id }).then(function(r){
+    if (r.error){ box.innerHTML = '<b>No se pudo pagar:</b> ' + r.error.message; return; }
+    box.innerHTML = '<b>¡Pedido pagado con saldo!</b><br>Lo entregamos en 1 a 2 minutos.';
+    loadBalance();
+    loadHistory();
+  });
+}
+
 function saveOrder(){
   var k = PACKS[sel], id = pid.value.trim();
   if (!currentUser || !validId(id)) return;
@@ -420,6 +450,8 @@ function saveOrder(){
 document.addEventListener("click", function(e){
   var t = e.target.closest ? e.target.closest(".paybtn, #wa") : null;
   if (t && t.getAttribute("aria-disabled") !== "true") saveOrder();
+  var b = e.target.closest ? e.target.closest("#payBalBtn") : null;
+  if (b) payWithBalance(b);
 });
 
 update();
