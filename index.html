@@ -250,8 +250,10 @@ function renderPay(k, ok){
   }
   var m = pay.value, box = document.getElementById("payPanel"), html = "";
   if (m === "Transferencia bancaria MX"){
-    html = '<b>Transferencia bancaria MX</b><br>Cuenta / CLABE: <b>722969010405445129</b><br>Titular: Henry Barcenas<br>Banco: Mercado Pago W' +
-      '<div style="margin-top:8px;color:var(--muted)">Después de transferir, manda tu comprobante por WhatsApp.</div>';
+    html = '<div style="font-size:19px;line-height:1.6"><b style="font-size:21px">Transferencia bancaria MX</b><br>' +
+      'Cuenta / CLABE:<br><b style="font-size:22px;letter-spacing:1px;word-break:break-all">722969010405445129</b><br>' +
+      'Titular: <b>Henry Barcenas</b><br>Banco: <b>Mercado Pago W</b></div>' +
+      '<div style="margin-top:10px;font-size:16px;color:var(--muted)">Después de transferir, manda tu comprobante por WhatsApp.</div>';
   } else if (m === "Tarjeta Credito o Debito"){
     html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
   } else if (m === "Mercado pago"){
