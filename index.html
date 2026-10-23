@@ -120,6 +120,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
 <header>
   <div class="wrap bar">
     <a class="logo" href="#" aria-label="Six7venStore">SIX7VEN <span>STORE</span></a>
+    <button class="login-btn" id="balBtn" hidden>Saldo: <span id="balAmt">$0</span> MXN</button>
     <button class="login-btn" id="loginBtn">Iniciar sesión</button>
     <button class="menu-btn" id="menuBtn" aria-label="Menú" aria-expanded="false" aria-controls="menu"><svg class="i" viewBox="0 0 24 24" style="width:26px;height:26px" aria-hidden="true"><use href="#burger"/></svg></button>
     <nav class="menu" id="menu" hidden>
@@ -192,6 +193,17 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
   <section class="box" id="historial" style="margin-bottom:22px">
     <h2>Historial de recargas</h2>
     <div id="histList">Inicia sesión para ver tus recargas.</div>
+  </section>
+  <section class="box" id="recargar" hidden style="margin-bottom:22px">
+    <button id="recBack" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
+    <h2>Recargar saldo</h2>
+    <p>Saldo actual: <b>$<span id="recSaldo">0</span> MXN</b></p>
+    <div class="field"><label for="recAmt">Monto a recargar (MXN)</label><input id="recAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 100"></div>
+    <div class="paypanel" style="display:block;font-size:19px;line-height:1.6"><b style="font-size:21px">Transferencia bancaria MX</b><br>
+      Cuenta / CLABE:<br><b style="font-size:22px;letter-spacing:1px;word-break:break-all">722969010405445129</b><br>
+      Titular: <b>Henry Barcenas</b><br>Banco: <b>Mercado Pago W</b></div>
+    <div class="hint" style="font-size:16px">Después de transferir, envía tu comprobante por WhatsApp con el monto.</div>
+    <a class="paybtn" id="recWa" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px">Enviar comprobante por WhatsApp</a>
   </section>
 </main>
 
@@ -306,6 +318,24 @@ loginBtn.addEventListener("click", function(){
   if (currentUser){ sb.auth.signOut(); return; }
   authBox.hidden = false;
 });
+var balBtn = document.getElementById("balBtn");
+function goView(v){
+  var isR = v === "recargar";
+  Array.prototype.forEach.call(document.querySelectorAll("main > *"), function(el){
+    if (el.id === "recargar" || el.id === "authBox") return;
+    el.style.display = isR ? "none" : "";
+  });
+  document.getElementById("recargar").hidden = !isR;
+  window.scrollTo(0, 0);
+}
+balBtn.addEventListener("click", function(){ goView("recargar"); });
+document.getElementById("recBack").addEventListener("click", function(){ goView("tienda"); });
+document.getElementById("recAmt").addEventListener("input", function(){
+  var amt = parseInt(this.value, 10);
+  var user = currentUser ? currentUser.email.split("@")[0] : "";
+  var msg = "Hola, quiero recargar " + (amt > 0 ? "$" + amt + " MXN" : "saldo") + " a mi cuenta de la tienda. Usuario: " + user + ". Te envío mi comprobante.";
+  document.getElementById("recWa").href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+});
 var authMode = "login";
 document.getElementById("authSwitch").addEventListener("click", function(){
   authMode = authMode === "login" ? "signup" : "login";
@@ -340,6 +370,10 @@ sb.auth.onAuthStateChange(function(_event, session){
   currentUser = session ? session.user : null;
   loginBtn.textContent = currentUser ? "Salir" : "Iniciar sesión";
   authBox.hidden = !!currentUser;
+  balBtn.hidden = !currentUser;
+  if (!currentUser) goView("tienda");
+  document.getElementById("recSaldo").textContent = "0";
+  document.getElementById("balAmt").textContent = "$0";
   document.body.classList.toggle("locked", !currentUser);
   loadHistory();
   update();
