@@ -120,12 +120,14 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
 <header>
   <div class="wrap bar">
     <a class="logo" href="#" aria-label="Six7venStore">SIX7VEN <span>STORE</span></a>
-    <button class="login-btn" id="balBtn" hidden style="background:#22c55e;border-color:#16a34a;color:#052e16;font-weight:700;line-height:1.2">Saldo MXN<br>(<span id="balAmt">$0</span>)</button>
+    <button class="login-btn" id="balBtn" hidden style="background:#22c55e;border-color:#16a34a;color:#052e16;font-weight:700;line-height:1.2;white-space:nowrap;min-width:150px;width:auto;padding-left:18px;padding-right:18px">Saldo MXN<br>(<span id="balAmt">$0</span>)</button>
     <button class="login-btn" id="loginBtn">Iniciar sesión</button>
     <button class="menu-btn" id="menuBtn" aria-label="Menú" aria-expanded="false" aria-controls="menu"><svg class="i" viewBox="0 0 24 24" style="width:26px;height:26px" aria-hidden="true"><use href="#burger"/></svg></button>
     <nav class="menu" id="menu" hidden>
       <a href="#paquetes">Recargas</a>
       <a href="#historial">Historial de recargas</a>
+      <a href="#" id="menuSaldo" hidden>Saldo</a>
+      <a href="#" id="menuLogout" hidden>Cerrar sesión</a>
     </nav>
   </div>
   <div class="notice">
@@ -329,6 +331,15 @@ function goView(v){
   window.scrollTo(0, 0);
 }
 balBtn.addEventListener("click", function(){ goView("recargar"); });
+function closeMenu(){
+  document.getElementById("menu").setAttribute("hidden", "");
+  document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
+}
+document.getElementById("menuSaldo").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); goView("recargar"); });
+document.getElementById("menuLogout").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); sb.auth.signOut(); });
+Array.prototype.forEach.call(document.querySelectorAll('#menu a[href="#paquetes"], #menu a[href="#historial"]'), function(a){
+  a.addEventListener("click", function(){ closeMenu(); goView("tienda"); });
+});
 document.getElementById("recBack").addEventListener("click", function(){ goView("tienda"); });
 document.getElementById("recAmt").addEventListener("input", function(){
   var amt = parseInt(this.value, 10);
@@ -371,6 +382,9 @@ sb.auth.onAuthStateChange(function(_event, session){
   loginBtn.textContent = currentUser ? "Salir" : "Iniciar sesión";
   authBox.hidden = !!currentUser;
   balBtn.hidden = !currentUser;
+  loginBtn.hidden = !!currentUser;
+  document.getElementById("menuSaldo").hidden = !currentUser;
+  document.getElementById("menuLogout").hidden = !currentUser;
   if (!currentUser) goView("tienda");
   document.getElementById("recSaldo").textContent = "0";
   document.getElementById("balAmt").textContent = "$0";
