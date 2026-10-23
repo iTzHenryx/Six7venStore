@@ -435,7 +435,7 @@ function payWithBalance(btn){
   btn.disabled = true;
   sb.rpc("comprar_con_saldo", { p_diamonds: k.d, p_bonus: k.b, p_price: k.p, p_player_id: id }).then(function(r){
     if (r.error){ box.innerHTML = '<b>No se pudo pagar:</b> ' + r.error.message; return; }
-    box.innerHTML = '<b>¡Pedido pagado con saldo!</b><br>Lo entregamos en 1 a 2 minutos.';
+    box.innerHTML = '<b style="color:#22c55e;font-size:18px">Recarga Exitosa (' + k.d + ' diamantes)</b><br><span style="color:#22c55e">Su pedido se guardó en su historial.</span>';
     loadBalance();
     loadHistory();
   });
