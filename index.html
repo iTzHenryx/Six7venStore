@@ -123,10 +123,20 @@ body.locked main > *:not(#authBox), body.locked footer, body.locked .notice, bod
 .hint{font-size:14px;color:var(--muted);margin-top:6px}
 .hint:empty{display:none}
 .hint.ok{color:#22c55e}
-.trust{list-style:none;margin:14px auto 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;max-width:860px}
-.trust li{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:7px 10px;font-size:12.5px;font-weight:600;color:#d6d6dc;text-align:center;line-height:1.3}
-.trust li[hidden]{display:none}
-.trust b{color:#22c55e}
+.bal-g{color:#22c55e}
+.payline{font-size:16px}
+.pay-main{display:block;width:100%;margin-top:10px;padding:15px;border:0;border-radius:14px;background:#15803d;color:#fff;font:700 18px "Outfit",sans-serif;cursor:pointer;transition:opacity .15s}
+.pay-main:hover:not(:disabled){background:#166534}
+.pay-main:disabled{opacity:.4;cursor:not-allowed}
+.paymsg{margin-top:10px;font-size:14px;line-height:1.5;color:var(--muted)}
+.paymsg:empty{display:none}
+.paymsg .rec-btn{display:block;width:100%;margin-top:8px;padding:11px;border:1.5px solid #15803d;border-radius:12px;background:transparent;color:#22c55e;font:700 15px "Outfit",sans-serif;cursor:pointer}
+.adm-res span b{color:#22c55e}
+.fast{display:flex;align-items:center;gap:12px;margin:14px 0 0;padding:12px 14px;border-radius:16px;
+  background:linear-gradient(90deg,rgba(34,197,94,.16),rgba(34,197,94,.04));border:1.5px solid rgba(34,197,94,.45)}
+.fast .bolt{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:12px;background:#22c55e;color:#052e16;font-size:22px}
+.fast b{display:block;color:#fff;font-size:16px;line-height:1.2}
+.fast span{color:#bbf7d0;font-size:13px}
 .sub-h{margin:26px 0 12px;font-size:19px}
 .link-back{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px}
 .promo{margin:4px 0 16px;padding:12px 14px;border-radius:14px;background:#2a2410;border:1.5px solid #a16207;color:#fde68a;font-size:15px}
@@ -214,14 +224,6 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
       <p><b>SOPORTE AL WHATSAPP: <span id="waShow"></span></b></p>
     </div>
   </div>
-  <div class="wrap">
-    <ul class="trust" aria-label="Por qué comprar aquí">
-      <li>⚡ Entrega en 1–2 min</li>
-      <li>🔒 Pago seguro con saldo</li>
-      <li>💬 Soporte por WhatsApp</li>
-      <li id="trustCount" hidden>💎 <b id="trustN"></b> recargas entregadas</li>
-    </ul>
-  </div>
 </header>
 
 <main class="wrap">
@@ -237,6 +239,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
     <section class="cat" id="paquetes">
       <h2 class="ptitle">Elige tu paquete</h2>
       <p class="psub">Cada paquete incluye bono de diamantes.</p>
+      <div class="fast"><div class="bolt" aria-hidden="true">⚡</div><div><b>Recargas en menos de un minuto</b><span>Entrega automática al ID que escribas.</span></div></div>
       <fieldset class="packs" id="packs">
         <legend style="position:absolute;left:-9999px">Paquete de diamantes</legend>
       </fieldset>
@@ -256,11 +259,10 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
           <div class="hint" id="pidHint"></div>
         </div>
         <div class="field" style="margin-bottom:0">
-          <label for="pay">Método de pago</label>
-          <select id="pay">
-            <option>Saldo</option>
-          </select>
-          <div class="paypanel" id="payPanel"></div>
+          <input type="hidden" id="pay" value="Saldo">
+          <div class="payline">Tu saldo: <b class="bal-g">$<span id="paySaldo">0</span> MXN</b></div>
+          <button type="button" class="pay-main" id="payBalBtn" disabled>Pagar con saldo</button>
+          <div class="paymsg" id="payPanel"></div>
         </div>
       </div>
       <div class="box" aria-live="polite">
@@ -285,7 +287,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
   <section class="box" id="recargar" hidden style="margin-bottom:22px">
     <button id="recBack" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
     <h2>Recargar saldo</h2>
-    <p>Saldo actual: <b>$<span id="recSaldo">0</span> MXN</b></p>
+    <p>Saldo actual: <b class="bal-g">$<span id="recSaldo">0</span> MXN</b></p>
     <div class="promo" id="promoBox">🎁 <b>Recarga $<span class="promo-min"></span> o más y te regalamos <span class="promo-pct"></span>% extra</b> de saldo.</div>
     <div class="field"><label for="recAmt">Monto a recargar (MXN)</label><input id="recAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 100">
       <div class="hint" id="recBonus"></div></div>
@@ -314,7 +316,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
     </div>
 
     <div id="admForm" class="adm-form" hidden>
-      <div class="adm-client">Cliente: <b id="admUser"></b><br>Saldo actual: <b>$<span id="admBal">0</span> MXN</b></div>
+      <div class="adm-client">Cliente: <b id="admUser"></b><br>Saldo actual: <b class="bal-g">$<span id="admBal">0</span> MXN</b></div>
       <div class="field">
         <label for="admAmt">Monto (MXN)</label>
         <input id="admAmt" type="number" step="1" inputmode="decimal" placeholder="Ej. 200  (o -50 para restar)">
@@ -430,32 +432,22 @@ function verifyId(){
 }
 verifyBtn.addEventListener("click", verifyId);
 
+var paying = false;
 function renderPay(k, ok){
-  if (!ok || !currentUser){
-    var pb = document.getElementById("payPanel");
-    pb.innerHTML = !currentUser ? '<b>Inicia sesión para pagar</b><br>Así guardamos tu historial de recargas.' : '<b>Primero escribe tu ID de jugador</b><br>Debe tener solo números, de 7 a 13 dígitos.';
-    pb.style.display = "block";
-    return;
-  }
-  var m = pay.value, box = document.getElementById("payPanel"), html = "";
-  if (VERIFY_ID && verified.id !== pid.value.trim()){
-    box.innerHTML = '<b>Verifica tu ID</b><br>Dale a "Verificar" para confirmar que es tu cuenta antes de pagar.';
-    box.style.display = "block";
-    return;
-  }
-  if (m === "Saldo"){
-    var enough = myBalance !== null && myBalance >= k.p;
-    html = '<b>Pagar con saldo</b><br>Tu saldo: <b>$' + (myBalance === null ? "0" : myBalance) + ' MXN</b>' +
-      (enough
-        ? '<button class="balpay" id="payBalBtn" type="button" style="width:100%;border:0;font:inherit;cursor:pointer;padding:12px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:700;margin-top:10px">Pagar $' + k.p + ' MXN con saldo</button>'
-        : '<br><i>Saldo insuficiente.</i><button id="goRecargar" type="button" style="width:100%;border:0;font:inherit;cursor:pointer;padding:12px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:700;margin-top:10px">Recargar saldo por transferencia</button>');
-  } else if (m === "Tarjeta Credito o Debito"){
-    html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
-  } else if (m === "Mercado pago"){
-    html = '<b>Pago con Mercado Pago</b><a class="paybtn" href="' + MP_LINK + '" target="_blank" rel="noopener">Pagar con Mercado Pago</a><div style="margin-top:8px;color:var(--muted)">Confirma el monto del paquete por WhatsApp.</div>';
-  }
-  box.innerHTML = html;
-  box.style.display = html ? "block" : "none";
+  if (paying) return; // no tocar el botón mientras se procesa un pago
+  var btn = document.getElementById("payBalBtn"), box = document.getElementById("payPanel"),
+      id = pid.value.trim(), bal = myBalance === null ? 0 : myBalance, msg = "";
+  document.getElementById("paySaldo").textContent = fmt(bal);
+  btn.textContent = "Pagar $" + k.p + " MXN con saldo";
+
+  if (!currentUser) msg = "Inicia sesión para pagar.";
+  else if (!ok) msg = id ? "" : "Escribe tu ID de jugador (7 a 13 dígitos) para habilitar el pago.";
+  else if (VERIFY_ID && verified.id !== id) msg = 'Dale a "Verificar" para confirmar tu cuenta y habilitar el pago.';
+  else if (bal < k.p) msg = 'Saldo insuficiente para este paquete.<button type="button" class="rec-btn" id="goRecargar">Recargar saldo por transferencia</button>';
+
+  var ready = currentUser && ok && !(VERIFY_ID && verified.id !== id) && bal >= k.p;
+  btn.disabled = !ready;
+  box.innerHTML = msg;
 }
 
 function update(){
@@ -502,16 +494,6 @@ menuBtn.addEventListener("click", function(){
 });
 
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Contador público de recargas entregadas (se muestra a partir de 20 para no verse vacío)
-var MIN_CONTADOR = 20;
-sb.rpc("recargas_entregadas").then(function(r){
-  var n = r && !r.error ? Number(r.data) : 0;
-  if (n >= MIN_CONTADOR){
-    document.getElementById("trustN").textContent = "+" + n.toLocaleString("es-MX");
-    document.getElementById("trustCount").hidden = false;
-  }
-}, function(){});
 var loginBtn = document.getElementById("loginBtn"), authBox = document.getElementById("authBox");
 
 loginBtn.addEventListener("click", function(){
@@ -689,7 +671,7 @@ function admSearch(){
     if (!r.data.length){ msg.className = "hint err"; msg.textContent = "No encontré clientes con ese usuario."; return; }
     msg.textContent = "";
     box.innerHTML = r.data.map(function(c, i){
-      return '<button type="button" class="adm-res" data-i="' + i + '">' + esc(c.usuario) + ' <span>Saldo: $' + esc(fmt(c.saldo)) + '</span></button>';
+      return '<button type="button" class="adm-res" data-i="' + i + '">' + esc(c.usuario) + ' <span>Saldo: <b>$' + esc(fmt(c.saldo)) + '</b></span></button>';
     }).join("");
     box._data = r.data;
     if (r.data.length === 1) admPick(r.data[0]);
@@ -784,8 +766,17 @@ function payWithBalance(btn){
   var k = PACKS[sel], id = pid.value.trim(), box = document.getElementById("payPanel");
   if (!currentUser || !validId(id)) return;
   if (VERIFY_ID && verified.id !== id) return;
+  if (paying || btn.disabled) return;
+  paying = true;
   btn.disabled = true;
-  box.innerHTML = '<b>Procesando tu pedido...</b>';
+  btn.textContent = "Procesando...";
+  box.innerHTML = '';
+  function fail(html){
+    paying = false;
+    btn.disabled = false;
+    btn.textContent = "Pagar $" + k.p + " MXN con saldo";
+    box.innerHTML = html;
+  }
   sb.auth.getSession().then(function(s){
     var token = s.data.session ? s.data.session.access_token : "";
     return fetch(SUPABASE_URL + "/functions/v1/comprar-recarga", {
@@ -795,8 +786,7 @@ function payWithBalance(btn){
     });
   }).then(function(r){ return r.json(); }).then(function(j){
     if (!j.ok){
-      box.innerHTML = '<b style="color:#ef4444">No se pudo pagar:</b> ' + (j.error || "Intenta de nuevo.");
-      btn.disabled = false;
+      fail('<b style="color:#ef4444">No se pudo pagar:</b> ' + esc(j.error || "Intenta de nuevo."));
       return;
     }
     var flash = document.getElementById("histFlash");
@@ -809,15 +799,14 @@ function payWithBalance(btn){
         (verified.id === id && verified.name ? ' (' + esc(verified.name) + ')' : '') + '.';
     }
     flash.hidden = false;
-    btn.disabled = false;
+    paying = false;
     pid.value = "";
     resetVerify();
     update();
-    loadBalance();
+    loadBalance(update);
     goView("historial");
   }).catch(function(){
-    box.innerHTML = '<b style="color:#ef4444">Error de conexión.</b> Revisa tu historial antes de volver a intentar.';
-    btn.disabled = false;
+    fail('<b style="color:#ef4444">Error de conexión.</b> Revisa tu historial antes de volver a intentar.');
   });
 }
 
