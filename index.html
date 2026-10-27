@@ -73,6 +73,16 @@ main{padding:28px 0 8px}
 .field input,.field select{width:100%;font:inherit;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line);background:#0e0e10;color:var(--ink)}
 .selpack{margin:-6px 0 18px;padding:12px 14px;border-radius:14px;background:#2d2d33;border:1.5px solid var(--cyan);font-weight:700;font-size:17px}
 .field input.bad{border-color:var(--err);color:var(--err)}
+.pid-row{display:flex;gap:8px}
+.pid-row input{flex:1;min-width:0}
+.verify-btn{flex:none;padding:0 18px;border-radius:14px;border:0;background:#3b82f6;color:#fff;font:700 15px "Outfit",sans-serif;cursor:pointer}
+.verify-btn:disabled{opacity:.5;cursor:default}
+.verify-btn[hidden]{display:none}
+.pid-name{margin-top:8px;padding:10px 12px;border-radius:12px;font-size:15px;border:1.5px solid var(--line);background:#2d2d33}
+.pid-name[hidden]{display:none}
+.pid-name.ok{border-color:#16a34a;background:#0b3d1f;color:#bbf7d0}
+.pid-name.ok b{color:#22c55e}
+.pid-name.bad{border-color:#b91c1c;background:#3d0b0b;color:#fecaca}
 .paypanel{margin-top:14px;padding:14px;border-radius:14px;background:#2d2d33;border:1.5px solid var(--line);font-size:15px;line-height:1.5;display:none}
 .paybtn{display:block;margin-top:10px;background:#3ddc84;color:#111113;text-align:center;padding:12px;border-radius:12px;font-weight:700;text-decoration:none}
 #histList{display:grid;gap:12px}
@@ -98,6 +108,7 @@ main{padding:28px 0 8px}
 .hc-status.bad{background:#3d0b0b;color:#f87171}
 body.locked main > *:not(#authBox), body.locked footer, body.locked .notice, body.locked .menu-btn, body.locked .menu{display:none}
 .hint{font-size:14px;color:var(--muted);margin-top:6px}
+.hint:empty{display:none}
 .hint.err{color:var(--err)}
 dl{margin:0 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
 dt{color:var(--muted)} dd{margin:0;text-align:right;font-weight:600}
@@ -153,7 +164,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
   <div class="notice">
     <div class="wrap">
       
-      <p><b>PEDIDOS POR WHATSAPP: <span id="waShow"></span></b></p>
+      <p><b>SOPORTE AL WHATSAPP: <span id="waShow"></span></b></p>
     </div>
   </div>
 </header>
@@ -182,8 +193,12 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
         <div class="selpack" id="selPack"></div>
         <div class="field">
           <label for="pid">ID de jugador</label>
-          <input id="pid" inputmode="numeric" autocomplete="off" placeholder="Ej. 123456789" maxlength="13">
-          <div class="hint" id="pidHint">Lo ves en tu perfil dentro de Free Fire.</div>
+          <div class="pid-row">
+            <input id="pid" inputmode="numeric" autocomplete="off" placeholder="Ej. 123456789" maxlength="13">
+            <button type="button" class="verify-btn" id="verifyBtn" hidden>Verificar</button>
+          </div>
+          <div class="pid-name" id="pidName" role="status" hidden></div>
+          <div class="hint" id="pidHint"></div>
         </div>
         <div class="field" style="margin-bottom:0">
           <label for="pay">Método de pago</label>
@@ -236,6 +251,7 @@ var MP_LINK   = "https://link.mercadopago.com.mx/7venstore"; // tu link de cobro
 var QR_URL    = "qr-oxxo.jpg";                               // URL de la imagen del QR de depósito OXXO
 var SUPABASE_URL = "https://gspwhmueszdaytwqsiqi.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcHdobXVlc3pkYXl0d3FzaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjI1ODMsImV4cCI6MjEwODI5ODU4M30.L9vHkvWL-RIgtrfU6bpA18IB6DdaelqRgApwj6IQ238";
+var VERIFY_ID = false; // ← cámbialo a true cuando la función "verificar-jugador" esté lista en Supabase
 var currentUser = null;
 var PACKS = [  // d = diamantes, b = bono, p = precio
   {d:100,  b:10,  p:15},
@@ -267,6 +283,52 @@ var pid = document.getElementById("pid"), pay = document.getElementById("pay"),
     hint = document.getElementById("pidHint"), wa = document.getElementById("wa");
 function validId(v){ return /^\d{7,13}$/.test(v); }
 
+/* ===== Verificación del ID (nombre de la cuenta) ===== */
+var verified = { id: null, name: "" };
+var verifyBtn = document.getElementById("verifyBtn"), pidName = document.getElementById("pidName");
+verifyBtn.hidden = !VERIFY_ID;
+function resetVerify(){
+  verified = { id: null, name: "" };
+  pidName.hidden = true;
+  pidName.className = "pid-name";
+}
+function verifyId(){
+  var id = pid.value.trim();
+  if (!VERIFY_ID || !currentUser || !validId(id)) return;
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = "Buscando...";
+  pidName.hidden = false;
+  pidName.className = "pid-name";
+  pidName.textContent = "Buscando tu cuenta...";
+  sb.auth.getSession().then(function(s){
+    var token = s.data.session ? s.data.session.access_token : "";
+    return fetch(SUPABASE_URL + "/functions/v1/verificar-jugador", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY },
+      body: JSON.stringify({ player_id: id })
+    });
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if (pid.value.trim() !== id) return; // el cliente cambió el ID mientras se buscaba
+    if (j.ok && j.name){
+      verified = { id: id, name: j.name };
+      pidName.className = "pid-name ok";
+      pidName.innerHTML = '✅ Cuenta: <b>' + esc(j.name) + '</b><br><small>Si no es tu cuenta, revisa el ID antes de pagar.</small>';
+    } else {
+      verified = { id: null, name: "" };
+      pidName.className = "pid-name bad";
+      pidName.textContent = "❌ " + (j.error || "No encontramos esa cuenta. Revisa tu ID.");
+    }
+  }).catch(function(){
+    pidName.className = "pid-name bad";
+    pidName.textContent = "❌ No se pudo verificar en este momento. Intenta de nuevo.";
+  }).then(function(){
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verificar";
+    update();
+  });
+}
+verifyBtn.addEventListener("click", verifyId);
+
 function renderPay(k, ok){
   if (!ok || !currentUser){
     var pb = document.getElementById("payPanel");
@@ -275,6 +337,11 @@ function renderPay(k, ok){
     return;
   }
   var m = pay.value, box = document.getElementById("payPanel"), html = "";
+  if (VERIFY_ID && verified.id !== pid.value.trim()){
+    box.innerHTML = '<b>Verifica tu ID</b><br>Dale a "Verificar" para confirmar que es tu cuenta antes de pagar.';
+    box.style.display = "block";
+    return;
+  }
   if (m === "Saldo"){
     var enough = myBalance !== null && myBalance >= k.p;
     html = '<b>Pagar con saldo</b><br>Tu saldo: <b>$' + (myBalance === null ? "0" : myBalance) + ' MXN</b>' +
@@ -298,9 +365,10 @@ function update(){
   document.getElementById("sId").textContent = id || "—";
   document.getElementById("sPay").textContent = pay.value;
   document.getElementById("sTotal").textContent = money(k.p) + " MXN";
+  verifyBtn.disabled = !ok || !currentUser || verifyBtn.textContent !== "Verificar";
   renderPay(k, ok);
   if (id && !ok){ hint.textContent = "El ID debe tener solo números (entre 7 y 13 dígitos)."; hint.className = "hint err"; }
-  else { hint.textContent = "Lo ves en tu perfil dentro de Free Fire."; hint.className = "hint"; }
+  else { hint.textContent = ""; hint.className = "hint"; }
   pid.classList.toggle("bad", id !== "" && !ok);
   var msg = "Hola hize pedido en la pagina\n" + k.d + " diamantes + " + k.b + " bono - " + money(k.p) + " MXN\n" + (id || "") + "\n" + pay.value;
   wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
@@ -310,7 +378,13 @@ function update(){
 }
 
 packsEl.addEventListener("change", function(e){ sel = +e.target.value; update(); });
-pid.addEventListener("input", function(){ update(); });
+pid.addEventListener("input", function(){
+  if (verified.id !== null && verified.id !== pid.value.trim()) resetVerify();
+  update();
+});
+pid.addEventListener("keydown", function(e){
+  if (e.key === "Enter" && VERIFY_ID){ e.preventDefault(); verifyId(); }
+});
 pay.addEventListener("change", update);
 wa.addEventListener("click", function(e){
   if (wa.getAttribute("aria-disabled") === "true"){
@@ -462,6 +536,7 @@ function loadBalance(done){
 function payWithBalance(btn){
   var k = PACKS[sel], id = pid.value.trim(), box = document.getElementById("payPanel");
   if (!currentUser || !validId(id)) return;
+  if (VERIFY_ID && verified.id !== id) return;
   btn.disabled = true;
   box.innerHTML = '<b>Procesando tu pedido...</b>';
   sb.auth.getSession().then(function(s){
@@ -483,11 +558,13 @@ function payWithBalance(btn){
       flash.innerHTML = '<b>⏳ Tu pedido de ' + k.d + ' diamantes quedó en revisión</b><br>' + esc(j.message || "Te confirmamos por WhatsApp.");
     } else {
       flash.className = "hist-flash ok";
-      flash.innerHTML = '<b>✅ ¡Recarga exitosa! ' + k.d + ' + ' + k.b + ' diamantes</b><br>Ya se enviaron al ID ' + esc(id) + '.';
+      flash.innerHTML = '<b>✅ ¡Recarga exitosa! ' + k.d + ' + ' + k.b + ' diamantes</b><br>Ya se enviaron al ID ' + esc(id) +
+        (verified.id === id && verified.name ? ' (' + esc(verified.name) + ')' : '') + '.';
     }
     flash.hidden = false;
     btn.disabled = false;
     pid.value = "";
+    resetVerify();
     update();
     loadBalance();
     goView("historial");
