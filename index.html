@@ -83,7 +83,7 @@ main{padding:28px 0 8px}
 .hc-date{color:var(--muted);font-size:13px;margin-top:4px}
 .hc-id{color:var(--muted);font-size:13px;word-break:break-all}
 .hc-id b{color:#fff;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}
-.hc-method{display:inline-block;margin-top:10px;background:#0f3a33;color:#5eead4;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.hc-method{display:inline-block;margin-top:8px;color:#22c55e;font-size:13px;font-weight:700}
 .hc-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none;text-align:right}
 .hc-price{color:#22c55e;font-weight:800;font-size:19px;white-space:nowrap}
 .hc-price small{font-size:11px;font-weight:600}
@@ -418,14 +418,12 @@ function loadHistory(){
     list.innerHTML = r.data.map(function(o){
       var st = String(o.status || "pendiente"), stl = st.toLowerCase();
       var cls = /complet|exitos|entregad/.test(stl) ? "ok" : /revisi|pendien|proces/.test(stl) ? "wait" : /fall|error|cancel|rechaz/.test(stl) ? "bad" : "";
-      var num = String(o.id || "");
-      if (num.length > 8) num = num.replace(/-/g, "").slice(-6).toUpperCase();
       var d = new Date(o.created_at);
       var when = d.toLocaleDateString("es-MX", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " +
                  d.toLocaleTimeString("es-MX", { hour:"2-digit", minute:"2-digit", hour12:true });
       return '<div class="hist-card">' +
         '<div class="hc-main">' +
-          '<div class="hc-title">' + esc(o.diamonds) + ' Diamantes + ' + esc(o.bonus) + ' Bono' + (num ? ' <span class="hc-num">#' + esc(num) + '</span>' : '') + '</div>' +
+          '<div class="hc-title">' + esc(o.diamonds) + ' Diamantes + ' + esc(o.bonus) + ' Bono</div>' +
           '<div class="hc-date">' + esc(when) + '</div>' +
           '<div class="hc-id">ID: <b>' + esc(o.player_id) + '</b></div>' +
           '<span class="hc-method">' + esc(o.method || "Saldo") + '</span>' +
