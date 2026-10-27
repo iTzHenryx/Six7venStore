@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Six7venStore | Diamantes Free Fire</title>
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Recarga diamantes de Free Fire en minutos. Paga con saldo, entrega automática y soporte por WhatsApp.">
+<meta name="theme-color" content="#121214">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Six7venStore">
+<meta property="og:title" content="Six7venStore · Diamantes Free Fire">
+<meta property="og:description" content="Recarga diamantes en minutos. Entrega automática y soporte por WhatsApp.">
+<meta property="og:url" content="https://six7venstore.com/">
+<meta property="og:image" content="https://six7venstore.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'%3E%3Cg stroke='%23111113' stroke-width='9' stroke-linejoin='round'%3E%3Cpolygon points='50,10 150,10 130,65 70,65' fill='%23cdeeff'/%3E%3Cpolygon points='50,10 70,65 5,65' fill='%238fd8fa'/%3E%3Cpolygon points='150,10 195,65 130,65' fill='%238fd8fa'/%3E%3Cpolygon points='5,65 70,65 100,175' fill='%235cbcec'/%3E%3Cpolygon points='70,65 130,65 100,175' fill='%238fd8fa'/%3E%3Cpolygon points='130,65 195,65 100,175' fill='%233b97d3'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="og-icon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121214; --panel:#1c1c1f; --card:#232327; --line:#3a3a40; --ink:#ffffff; --muted:#b4b4ba;
+  --cyan:#e9e9ee; --cyan-d:#36363c; --green:#ffffff; --warn:#f0d34a; --err:#ff8e7d;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth;background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;color:var(--ink);font:400 15px/1.5 "Outfit",system-ui,sans-serif;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -5%,rgba(255,255,255,.07),transparent 70%),
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px) 0 0/56px 56px,
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px) 0 0/56px 56px,
+    var(--bg);background-color:var(--bg)}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+a{color:inherit}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.bar{display:flex;justify-content:space-between;align-items:center;padding:22px 14px;position:relative}
+.logo{font:800 32px/1 "Outfit",sans-serif;letter-spacing:.01em;text-decoration:none}
+.logo{display:inline-block;color:#3b82f6;letter-spacing:.06em;text-shadow:0 0 14px rgba(59,130,246,.55),0 2px 0 #0b2a6b}
+.logo span{color:#60a5fa;text-shadow:0 0 14px rgba(96,165,250,.5),0 2px 0 #0b2a6b}
+#fName{color:#e9e9ee;font-weight:600}
+.login-btn{margin-left:auto;margin-right:12px;height:54px;padding:0 16px;border-radius:16px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);font:600 15px "Outfit",sans-serif;cursor:pointer}
+.menu-btn{width:54px;height:54px;border-radius:16px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);display:grid;place-items:center;cursor:pointer;font-size:26px}
+.menu{position:absolute;right:14px;top:100px;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:8px;min-width:210px;z-index:5}
+.menu[hidden]{display:none}
+.menu a{display:block;padding:12px 14px;border-radius:10px;text-decoration:none;font-weight:600}
+.menu a:hover{background:var(--cyan-d)}
+
+.notice{border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line);background:rgba(255,255,255,.06)}
+.notice .wrap{display:flex;gap:16px;align-items:center;padding-top:14px;padding-bottom:14px}
+.notice .ico{color:var(--cyan);font-size:30px}
+.notice p{margin:0;flex:1;text-align:center;color:#d6d6dc;letter-spacing:.02em}
+.notice p b{font-weight:600}
+.notice .warn{color:var(--warn);display:flex;gap:8px;justify-content:center;align-items:center}
+
+main{padding:28px 0 8px}
+.cat{background:var(--panel);border:1.5px solid var(--line);border-radius:28px;padding:12px;margin-bottom:22px}
+.ptitle{margin:0;font-size:clamp(24px,6vw,30px);font-weight:700}
+.psub{margin:4px 0 0;color:var(--muted)}
+.packs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px;border:0;padding:0;min-width:0}
+.pack{position:relative;min-width:0}
+.pack input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:1}
+.pack label{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px 12px;overflow:hidden;height:100%}
+.pack input:checked + label{border-color:var(--cyan);background:#2d2d33;box-shadow:0 0 0 2px rgba(255,255,255,.35),0 0 24px rgba(255,255,255,.2)}
+.pack input:focus-visible + label{outline:3px solid var(--cyan);outline-offset:3px}
+.gem{width:clamp(22px,7vw,34px);height:clamp(20px,6.3vw,31px)}
+.ic{display:grid;place-items:center;width:clamp(44px,14vw,56px);height:clamp(44px,14vw,56px);border-radius:14px;background:#33333a;border:1.5px solid #55555e}
+.tt{color:#fff;font-weight:700;font-size:clamp(14px,4.2vw,18px);line-height:1.2}
+.pn{color:#ffffff;font-size:clamp(22px,7.4vw,32px);font-weight:800;line-height:1}
+.pl{color:var(--muted);font-size:clamp(12px,3.6vw,15px);line-height:1.2}
+.pb{background:var(--cyan-d);color:var(--green);font-size:clamp(11px,3.2vw,13px);font-weight:600;line-height:1.2;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.badge{position:absolute;top:8px;right:8px;background:#f0d34a;color:#111113;font-size:14px;font-weight:800;line-height:1;padding:7px 11px;border-radius:99px;white-space:nowrap;z-index:1}
+.pp{margin-top:auto;padding-top:6px;line-height:1.1;color:#3ddc84;font-size:clamp(22px,6.5vw,30px);font-weight:800}
+.pp small{font-size:11px;font-weight:600;color:#3ddc84}
+.order{display:grid;gap:16px;margin-bottom:22px}
+.box{background:var(--panel);border:1.5px solid var(--line);border-radius:28px;padding:22px}
+.box h2{margin:0 0 16px;font-size:26px}
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:600;margin-bottom:6px}
+.field input,.field select{width:100%;font:inherit;padding:13px 14px;border-radius:14px;border:1.5px solid var(--line);background:#0e0e10;color:var(--ink)}
+.selpack{margin:-6px 0 18px;padding:12px 14px;border-radius:14px;background:#2d2d33;border:1.5px solid var(--cyan);font-weight:700;font-size:17px}
+.field input.bad{border-color:var(--err);color:var(--err)}
+.pid-row{display:flex;gap:8px}
+.pid-row input{flex:1;min-width:0}
+.verify-btn{flex:none;padding:0 18px;border-radius:14px;border:0;background:#3b82f6;color:#fff;font:700 15px "Outfit",sans-serif;cursor:pointer}
+.verify-btn:disabled{opacity:.5;cursor:default}
+.verify-btn[hidden]{display:none}
+.pid-name{margin-top:8px;padding:10px 12px;border-radius:12px;font-size:15px;border:1.5px solid var(--line);background:#2d2d33}
+.pid-name[hidden]{display:none}
+.pid-name.ok{border-color:#16a34a;background:#0b3d1f;color:#bbf7d0}
+.pid-name.ok b{color:#22c55e}
+.pid-name.bad{border-color:#b91c1c;background:#3d0b0b;color:#fecaca}
+.paypanel{margin-top:14px;padding:14px;border-radius:14px;background:#2d2d33;border:1.5px solid var(--line);font-size:15px;line-height:1.5;display:none}
+.paybtn{display:block;margin-top:10px;background:#3ddc84;color:#111113;text-align:center;padding:12px;border-radius:12px;font-weight:700;text-decoration:none}
+#histList{display:grid;gap:12px}
+.hist-flash{margin:0 0 14px;padding:14px 16px;border-radius:14px;font-size:15px;line-height:1.5;border:1.5px solid}
+.hist-flash[hidden]{display:none}
+.hist-flash.ok{background:#0b3d1f;border-color:#16a34a;color:#bbf7d0}
+.hist-flash.ok b{color:#22c55e;font-size:17px}
+.hist-flash.wait{background:#3d320b;border-color:#a16207;color:#fde68a}
+.hist-flash.wait b{color:#eab308;font-size:17px}.hist-card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#0b0c0e;border:1.5px solid #1f2a2a;border-radius:16px;padding:14px 16px}
+.hc-main{min-width:0}
+.hc-title{font-weight:700;font-size:17px;line-height:1.3}
+.hc-num{font:500 12px ui-monospace,Menlo,Consolas,monospace;color:var(--muted);margin-left:4px;white-space:nowrap}
+.hc-date{color:var(--muted);font-size:13px;margin-top:4px}
+.hc-id{color:var(--muted);font-size:13px;word-break:break-all}
+.hc-id b{color:#fff;font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700}
+.hc-method{display:inline-block;margin-top:8px;color:#22c55e;font-size:13px;font-weight:700}
+.hc-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none;text-align:right}
+.hc-price{color:#22c55e;font-weight:800;font-size:19px;white-space:nowrap}
+.hc-price small{font-size:11px;font-weight:600}
+.hc-status{background:#1f2937;color:#d1d5db;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;white-space:nowrap}
+.hc-status.ok{background:#0b3d1f;color:#22c55e}
+.hc-status.wait{background:#3d320b;color:#eab308}
+.hc-status.bad{background:#3d0b0b;color:#f87171}
+body.locked main > *:not(#authBox), body.locked footer, body.locked .notice, body.locked .menu-btn, body.locked .menu{display:none}
+.hint{font-size:14px;color:var(--muted);margin-top:6px}
+.hint:empty{display:none}
+.hint.ok{color:#22c55e}
+.trust{list-style:none;margin:14px auto 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;max-width:860px}
+.trust li{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:7px 10px;font-size:12.5px;font-weight:600;color:#d6d6dc;text-align:center;line-height:1.3}
+.trust li[hidden]{display:none}
+.trust b{color:#22c55e}
+.sub-h{margin:26px 0 12px;font-size:19px}
+.link-back{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px}
+.promo{margin:4px 0 16px;padding:12px 14px;border-radius:14px;background:#2a2410;border:1.5px solid #a16207;color:#fde68a;font-size:15px}
+.promo b{color:#facc15}
+.promo[hidden]{display:none}
+.mov-list{display:grid;gap:8px}
+.mov{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#0b0c0e;border:1.5px solid #1f2a2a;border-radius:14px;padding:11px 14px}
+.mov-l{min-width:0}
+.mov-t{font-weight:700;font-size:15px}
+.mov-s{color:var(--muted);font-size:13px;word-break:break-word}
+.mov-r{text-align:right;flex:none}
+.mov-a{font-weight:800;font-size:17px;white-space:nowrap}
+.mov-a.pos{color:#22c55e} .mov-a.neg{color:#f87171}
+.mov-b{color:var(--muted);font-size:12px;white-space:nowrap}
+.adm-results{display:grid;gap:8px;margin-top:10px}
+.adm-results:empty{display:none}
+.adm-res{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:#0b0c0e;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--ink);font:600 15px "Outfit",sans-serif;cursor:pointer}
+.adm-res:hover,.adm-res.sel{border-color:#3b82f6}
+.adm-res span{color:var(--muted);font-weight:400}
+.adm-form{margin-top:6px;padding:16px;border-radius:18px;background:var(--card);border:1.5px solid var(--line)}
+.adm-form[hidden]{display:none}
+.adm-client{margin-bottom:14px;font-size:16px;line-height:1.6}
+.adm-check{display:flex;gap:8px;align-items:center;font-weight:600;margin:-4px 0 12px;cursor:pointer}
+.adm-check input{width:18px;height:18px}
+.adm-preview{padding:10px 12px;border-radius:12px;background:#2d2d33;font-size:15px;line-height:1.5}
+.adm-preview:empty{display:none}
+.adm-go{width:100%;border:0;font:inherit;font-weight:700;cursor:pointer}
+.adm-go:disabled{opacity:.5;cursor:default}
+.hint.err{color:var(--err)}
+dl{margin:0 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+dt{color:var(--muted)} dd{margin:0;text-align:right;font-weight:600}
+.total{color:#3ddc84;font-size:30px;font-weight:700}
+.btn{display:block;width:100%;background:var(--green);color:#111113;font:700 19px "Outfit",sans-serif;padding:15px 22px;border-radius:16px;text-decoration:none;text-align:center}
+.btn:hover{filter:brightness(1.08)}
+.btn[aria-disabled="true"]{opacity:.4;cursor:not-allowed}
+
+details{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 18px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}
+details p{margin:10px 0 0;color:var(--muted)}
+#faq h2{font-size:26px;margin:0 0 14px}
+footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
+
+@media (min-width:760px){
+  .packs{grid-template-columns:repeat(3,1fr);max-width:640px;margin-left:auto;margin-right:auto}
+  .order{grid-template-columns:1fr 1fr;align-items:start}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.chev{transition:none}}
+</style>
+</head>
+<body class="locked">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="pad" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"/></symbol>
+  <symbol id="mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+  <symbol id="alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="gem" viewBox="0 0 200 180">
+    <polygon points="50,10 150,10 130,65 70,65" fill="#cdeeff" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+    <polygon points="50,10 70,65 5,65" fill="#8fd8fa" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+    <polygon points="150,10 195,65 130,65" fill="#8fd8fa" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+    <polygon points="5,65 70,65 100,175" fill="#5cbcec" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+    <polygon points="70,65 130,65 100,175" fill="#8fd8fa" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+    <polygon points="130,65 195,65 100,175" fill="#3b97d3" stroke="#111113" stroke-width="7" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+  <symbol id="burger" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#" aria-label="Six7venStore">SIX7VEN <span>STORE</span></a>
+    <button class="login-btn" id="balBtn" hidden style="background:#22c55e;border-color:#16a34a;color:#052e16;font-weight:700;line-height:1.2;white-space:nowrap;min-width:150px;width:auto;padding-left:18px;padding-right:18px">Saldo MXN<br>(<span id="balAmt">$0</span>)</button>
+    <button class="login-btn" id="loginBtn">Iniciar sesión</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menú" aria-expanded="false" aria-controls="menu"><svg class="i" viewBox="0 0 24 24" style="width:26px;height:26px" aria-hidden="true"><use href="#burger"/></svg></button>
+    <nav class="menu" id="menu" hidden>
+      <a href="#paquetes">Recargas</a>
+      <a href="#historial">Historial de recargas</a>
+      <a href="#" id="menuSaldo" hidden>Saldo</a>
+      <a href="#" id="menuAdmin" hidden>Panel admin</a>
+      <a href="#" id="menuLogout" hidden>Cerrar sesión</a>
+    </nav>
+  </div>
+  <div class="notice">
+    <div class="wrap">
+      
+      <p><b>SOPORTE AL WHATSAPP: <span id="waShow"></span></b></p>
+    </div>
+  </div>
+  <div class="wrap">
+    <ul class="trust" aria-label="Por qué comprar aquí">
+      <li>⚡ Entrega en 1–2 min</li>
+      <li>🔒 Pago seguro con saldo</li>
+      <li>💬 Soporte por WhatsApp</li>
+      <li id="trustCount" hidden>💎 <b id="trustN"></b> recargas entregadas</li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="box" id="authBox" style="margin-bottom:22px">
+    <h2 id="authTitle">Inicia sesión</h2>
+    <div class="field"><label for="user">Usuario</label><input id="user" type="text" autocomplete="username" placeholder="tu_usuario"></div>
+    <div class="field"><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" placeholder="mínimo 6 caracteres"></div>
+    <button class="paybtn" id="authGo" style="width:100%;border:0;font:inherit;cursor:pointer">Entrar</button>
+    <button id="authSwitch" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;margin-top:12px;font:inherit">¿No tienes cuenta? Crear cuenta</button>
+    <div class="hint" id="authMsg"></div>
+  </div>
+  <form id="orderForm" onsubmit="return false" novalidate>
+    <section class="cat" id="paquetes">
+      <h2 class="ptitle">Elige tu paquete</h2>
+      <p class="psub">Cada paquete incluye bono de diamantes.</p>
+      <fieldset class="packs" id="packs">
+        <legend style="position:absolute;left:-9999px">Paquete de diamantes</legend>
+      </fieldset>
+    </section>
+
+    <div class="order" id="pedido">
+      <div class="box">
+        <h2>Tu pedido</h2>
+        <div class="selpack" id="selPack"></div>
+        <div class="field">
+          <label for="pid">ID de jugador</label>
+          <div class="pid-row">
+            <input id="pid" inputmode="numeric" autocomplete="off" placeholder="Ej. 123456789" maxlength="13">
+            <button type="button" class="verify-btn" id="verifyBtn" hidden>Verificar</button>
+          </div>
+          <div class="pid-name" id="pidName" role="status" hidden></div>
+          <div class="hint" id="pidHint"></div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="pay">Método de pago</label>
+          <select id="pay">
+            <option>Saldo</option>
+          </select>
+          <div class="paypanel" id="payPanel"></div>
+        </div>
+      </div>
+      <div class="box" aria-live="polite">
+        <h2>Resumen</h2>
+        <dl>
+          <dt>Paquete</dt><dd id="sDia">—</dd>
+          <dt>ID de jugador</dt><dd id="sId">—</dd>
+          <dt>Pago</dt><dd id="sPay">—</dd>
+          <dt>Total</dt><dd class="total" id="sTotal">—</dd>
+        </dl>
+        <a class="btn" id="wa" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir por WhatsApp</a>
+      </div>
+    </div>
+  </form>
+
+  <section class="box" id="historial" hidden style="margin-bottom:22px">
+    <button type="button" class="back-link" data-back="1" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
+    <h2>Historial de recargas</h2>
+    <div class="hist-flash" id="histFlash" role="status" hidden></div>
+    <div id="histList">Inicia sesión para ver tus recargas.</div>
+  </section>
+  <section class="box" id="recargar" hidden style="margin-bottom:22px">
+    <button id="recBack" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
+    <h2>Recargar saldo</h2>
+    <p>Saldo actual: <b>$<span id="recSaldo">0</span> MXN</b></p>
+    <div class="promo" id="promoBox">🎁 <b>Recarga $<span class="promo-min"></span> o más y te regalamos <span class="promo-pct"></span>% extra</b> de saldo.</div>
+    <div class="field"><label for="recAmt">Monto a recargar (MXN)</label><input id="recAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 100">
+      <div class="hint" id="recBonus"></div></div>
+    <div class="paypanel" style="display:block;font-size:19px;line-height:1.6"><b style="font-size:21px">Transferencia bancaria MX</b><br>
+      Cuenta / CLABE:<br><b style="font-size:22px;letter-spacing:1px;word-break:break-all">722969010405445129</b><br>
+      Titular: <b>Henry Barcenas</b><br>Banco: <b>Mercado Pago W</b></div>
+    <div class="hint" style="font-size:16px">Después de transferir, envía tu comprobante por WhatsApp con el monto.</div>
+    <a class="paybtn" id="recWa" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px">Enviar comprobante por WhatsApp</a>
+    <h3 class="sub-h">Tus movimientos de saldo</h3>
+    <div id="movList" class="mov-list">Todavía no tienes movimientos.</div>
+  </section>
+
+  <section class="box" id="admin" hidden style="margin-bottom:22px">
+    <button type="button" class="link-back" id="admBack">← Volver a la tienda</button>
+    <h2>Panel de administrador</h2>
+    <p class="psub" style="margin:-8px 0 16px">Cargar o corregir saldo de clientes.</p>
+
+    <div class="field">
+      <label for="admQ">Buscar cliente por usuario</label>
+      <div class="pid-row">
+        <input id="admQ" type="text" autocomplete="off" placeholder="Ej. juan123">
+        <button type="button" class="verify-btn" id="admSearch">Buscar</button>
+      </div>
+      <div class="hint" id="admQMsg"></div>
+      <div id="admResults" class="adm-results"></div>
+    </div>
+
+    <div id="admForm" class="adm-form" hidden>
+      <div class="adm-client">Cliente: <b id="admUser"></b><br>Saldo actual: <b>$<span id="admBal">0</span> MXN</b></div>
+      <div class="field">
+        <label for="admAmt">Monto (MXN)</label>
+        <input id="admAmt" type="number" step="1" inputmode="decimal" placeholder="Ej. 200  (o -50 para restar)">
+      </div>
+      <div class="field">
+        <label for="admNote">Nota (opcional)</label>
+        <input id="admNote" type="text" maxlength="120" placeholder="Ej. Transferencia BBVA 26/10">
+      </div>
+      <label class="adm-check"><input type="checkbox" id="admBonus" checked> Aplicar bono de promoción</label>
+      <div class="adm-preview" id="admPreview"></div>
+      <button type="button" class="paybtn adm-go" id="admGo">Confirmar</button>
+      <div class="hint" id="admMsg"></div>
+    </div>
+
+    <h3 class="sub-h">Últimos movimientos</h3>
+    <div id="admMovs" class="mov-list">—</div>
+  </section>
+</main>
+
+
+<script>
+/* ===== Edita aquí ===== */
+var STORE_NAME = "Six7venStore";
+var WHATSAPP   = "528911313903"; // tu número con código de país, sin + ni espacios
+var GAME = "Free Fire";
+var PAYPAL_ME = "https://paypal.me/TU_USUARIO";     // tu link de PayPal.me (sin monto)
+var MP_LINK   = "https://link.mercadopago.com.mx/7venstore"; // tu link de cobro de Mercado Pago
+var QR_URL    = "qr-oxxo.jpg";                               // URL de la imagen del QR de depósito OXXO
+var SUPABASE_URL = "https://gspwhmueszdaytwqsiqi.supabase.co";
+var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcHdobXVlc3pkYXl0d3FzaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjI1ODMsImV4cCI6MjEwODI5ODU4M30.L9vHkvWL-RIgtrfU6bpA18IB6DdaelqRgApwj6IQ238";
+var VERIFY_ID = false; // ← cámbialo a true cuando la función "verificar-jugador" esté lista en Supabase
+var PROMO_MIN = 500;   // bono de saldo: a partir de este monto...
+var PROMO_PCT = 3;     // ...se regala este % extra (pon 0 para quitar la promo). Debe coincidir con el SQL.
+var currentUser = null;
+var PACKS = [  // d = diamantes, b = bono, p = precio
+  {d:100,  b:10,  p:15},
+  {d:310,  b:31,  p:50},
+  {d:520,  b:52,  p:75},
+  {d:1060, b:106, p:137},
+  {d:2180, b:218, p:258},
+  {d:5600, b:560, p:635}
+];
+/* ====================== */
+
+document.getElementById("waShow").textContent = "+" + WHATSAPP;
+
+var money = function(n){ return "$" + n; };
+function fmt(n){ n = Number(n) || 0; return n % 1 ? n.toFixed(2) : String(n); }
+function promoBonus(amt){ return PROMO_PCT > 0 && amt >= PROMO_MIN ? Math.round(amt * PROMO_PCT) / 100 : 0; }
+document.getElementById("promoBox").hidden = !(PROMO_PCT > 0);
+Array.prototype.forEach.call(document.querySelectorAll(".promo-min"), function(e){ e.textContent = PROMO_MIN; });
+Array.prototype.forEach.call(document.querySelectorAll(".promo-pct"), function(e){ e.textContent = PROMO_PCT; });
+var sel = 0, packsEl = document.getElementById("packs");
+
+PACKS.forEach(function(k, i){
+  var w = document.createElement("div"); w.className = "pack";
+  w.innerHTML =
+    '<input type="radio" name="pack" id="p' + i + '" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
+    '<label for="p' + i + '"><span class="ic"><svg class="gem" viewBox="0 0 200 180" aria-hidden="true"><use href="#gem"/></svg></span>' +
+    (k.p === 258 ? '<span class="badge">Más vendida</span>' : k.p === 635 ? '<span class="badge">Mejor oferta</span>' : '') + '<span class="tt">' + k.d + ' diamantes<br>+ ' + k.b + ' bono</span>' +
+    
+    '<span class="pp">' + money(k.p) + '<small> MXN</small></span></label>';
+  packsEl.appendChild(w);
+});
+
+var pid = document.getElementById("pid"), pay = document.getElementById("pay"),
+    hint = document.getElementById("pidHint"), wa = document.getElementById("wa");
+function validId(v){ return /^\d{7,13}$/.test(v); }
+
+/* ===== Verificación del ID (nombre de la cuenta) ===== */
+var verified = { id: null, name: "" };
+var verifyBtn = document.getElementById("verifyBtn"), pidName = document.getElementById("pidName");
+verifyBtn.hidden = !VERIFY_ID;
+function resetVerify(){
+  verified = { id: null, name: "" };
+  pidName.hidden = true;
+  pidName.className = "pid-name";
+}
+function verifyId(){
+  var id = pid.value.trim();
+  if (!VERIFY_ID || !currentUser || !validId(id)) return;
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = "Buscando...";
+  pidName.hidden = false;
+  pidName.className = "pid-name";
+  pidName.textContent = "Buscando tu cuenta...";
+  sb.auth.getSession().then(function(s){
+    var token = s.data.session ? s.data.session.access_token : "";
+    return fetch(SUPABASE_URL + "/functions/v1/verificar-jugador", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY },
+      body: JSON.stringify({ player_id: id })
+    });
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if (pid.value.trim() !== id) return; // el cliente cambió el ID mientras se buscaba
+    if (j.ok && j.name){
+      verified = { id: id, name: j.name };
+      pidName.className = "pid-name ok";
+      pidName.innerHTML = '✅ Cuenta: <b>' + esc(j.name) + '</b><br><small>Si no es tu cuenta, revisa el ID antes de pagar.</small>';
+    } else {
+      verified = { id: null, name: "" };
+      pidName.className = "pid-name bad";
+      pidName.textContent = "❌ " + (j.error || "No encontramos esa cuenta. Revisa tu ID.");
+    }
+  }).catch(function(){
+    pidName.className = "pid-name bad";
+    pidName.textContent = "❌ No se pudo verificar en este momento. Intenta de nuevo.";
+  }).then(function(){
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verificar";
+    update();
+  });
+}
+verifyBtn.addEventListener("click", verifyId);
+
+function renderPay(k, ok){
+  if (!ok || !currentUser){
+    var pb = document.getElementById("payPanel");
+    pb.innerHTML = !currentUser ? '<b>Inicia sesión para pagar</b><br>Así guardamos tu historial de recargas.' : '<b>Primero escribe tu ID de jugador</b><br>Debe tener solo números, de 7 a 13 dígitos.';
+    pb.style.display = "block";
+    return;
+  }
+  var m = pay.value, box = document.getElementById("payPanel"), html = "";
+  if (VERIFY_ID && verified.id !== pid.value.trim()){
+    box.innerHTML = '<b>Verifica tu ID</b><br>Dale a "Verificar" para confirmar que es tu cuenta antes de pagar.';
+    box.style.display = "block";
+    return;
+  }
+  if (m === "Saldo"){
+    var enough = myBalance !== null && myBalance >= k.p;
+    html = '<b>Pagar con saldo</b><br>Tu saldo: <b>$' + (myBalance === null ? "0" : myBalance) + ' MXN</b>' +
+      (enough
+        ? '<button class="balpay" id="payBalBtn" type="button" style="width:100%;border:0;font:inherit;cursor:pointer;padding:12px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:700;margin-top:10px">Pagar $' + k.p + ' MXN con saldo</button>'
+        : '<br><i>Saldo insuficiente.</i><button id="goRecargar" type="button" style="width:100%;border:0;font:inherit;cursor:pointer;padding:12px;border-radius:12px;background:#22c55e;color:#052e16;font-weight:700;margin-top:10px">Recargar saldo por transferencia</button>');
+  } else if (m === "Tarjeta Credito o Debito"){
+    html = '<b>Pago con tarjeta</b><br>Al pedir por WhatsApp te enviamos un link de pago seguro para tu tarjeta.';
+  } else if (m === "Mercado pago"){
+    html = '<b>Pago con Mercado Pago</b><a class="paybtn" href="' + MP_LINK + '" target="_blank" rel="noopener">Pagar con Mercado Pago</a><div style="margin-top:8px;color:var(--muted)">Confirma el monto del paquete por WhatsApp.</div>';
+  }
+  box.innerHTML = html;
+  box.style.display = html ? "block" : "none";
+}
+
+function update(){
+  var k = PACKS[sel], id = pid.value.trim(), ok = validId(id);
+  var name = k.d + " + " + k.b;
+  document.getElementById("selPack").textContent = "Seleccionado: " + k.d + " + " + k.b + " bono · " + money(k.p) + " MXN";
+  document.getElementById("sDia").textContent = name;
+  document.getElementById("sId").textContent = id || "—";
+  document.getElementById("sPay").textContent = pay.value;
+  document.getElementById("sTotal").textContent = money(k.p) + " MXN";
+  verifyBtn.disabled = !ok || !currentUser || verifyBtn.textContent !== "Verificar";
+  renderPay(k, ok);
+  if (id && !ok){ hint.textContent = "El ID debe tener solo números (entre 7 y 13 dígitos)."; hint.className = "hint err"; }
+  else { hint.textContent = ""; hint.className = "hint"; }
+  pid.classList.toggle("bad", id !== "" && !ok);
+  var msg = "Hola hize pedido en la pagina\n" + k.d + " diamantes + " + k.b + " bono - " + money(k.p) + " MXN\n" + (id || "") + "\n" + pay.value;
+  wa.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+  var isWa = pay.value.indexOf("Transferencia") === 0;
+  wa.style.display = isWa ? "block" : "none";
+  wa.setAttribute("aria-disabled", ok && isWa && currentUser ? "false" : "true");
+}
+
+packsEl.addEventListener("change", function(e){ sel = +e.target.value; update(); });
+pid.addEventListener("input", function(){
+  if (verified.id !== null && verified.id !== pid.value.trim()) resetVerify();
+  update();
+});
+pid.addEventListener("keydown", function(e){
+  if (e.key === "Enter" && VERIFY_ID){ e.preventDefault(); verifyId(); }
+});
+pay.addEventListener("change", update);
+wa.addEventListener("click", function(e){
+  if (wa.getAttribute("aria-disabled") === "true"){
+    e.preventDefault();
+    hint.textContent = "Escribe tu ID de jugador para continuar."; hint.className = "hint err"; pid.focus();
+  }
+});
+
+var menuBtn = document.getElementById("menuBtn"), menuEl = document.getElementById("menu");
+menuBtn.addEventListener("click", function(){
+  var open = menuEl.hasAttribute("hidden");
+  if (open) menuEl.removeAttribute("hidden"); else menuEl.setAttribute("hidden", "");
+  menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+});
+
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Contador público de recargas entregadas (se muestra a partir de 20 para no verse vacío)
+var MIN_CONTADOR = 20;
+sb.rpc("recargas_entregadas").then(function(r){
+  var n = r && !r.error ? Number(r.data) : 0;
+  if (n >= MIN_CONTADOR){
+    document.getElementById("trustN").textContent = "+" + n.toLocaleString("es-MX");
+    document.getElementById("trustCount").hidden = false;
+  }
+}, function(){});
+var loginBtn = document.getElementById("loginBtn"), authBox = document.getElementById("authBox");
+
+loginBtn.addEventListener("click", function(){
+  if (currentUser){ sb.auth.signOut(); return; }
+  authBox.hidden = false;
+});
+var balBtn = document.getElementById("balBtn");
+function goView(v){
+  var subViews = ["recargar", "historial", "admin"];
+  Array.prototype.forEach.call(document.querySelectorAll("main > *"), function(el){
+    if (el.id === "authBox") return;
+    if (subViews.indexOf(el.id) !== -1){ el.hidden = el.id !== v; return; }
+    el.style.display = v === "tienda" ? "" : "none";
+  });
+  if (v !== "historial") document.getElementById("histFlash").hidden = true;
+  if (v === "historial") loadHistory();
+  if (v === "recargar") loadMovements();
+  if (v === "admin") loadAdminMovs();
+  window.scrollTo(0, 0);
+}
+balBtn.addEventListener("click", function(){ goView("recargar"); });
+function closeMenu(){
+  document.getElementById("menu").setAttribute("hidden", "");
+  document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
+}
+document.getElementById("menuSaldo").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); goView("recargar"); });
+document.getElementById("menuLogout").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); sb.auth.signOut(); });
+Array.prototype.forEach.call(document.querySelectorAll('#menu a[href="#paquetes"], #menu a[href="#historial"]'), function(a){
+  a.addEventListener("click", function(){
+    closeMenu();
+    goView(a.getAttribute("href") === "#historial" ? "historial" : "tienda");
+  });
+});
+document.getElementById("menuAdmin").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); goView("admin"); });
+document.getElementById("admBack").addEventListener("click", function(){ goView("tienda"); });
+document.getElementById("recBack").addEventListener("click", function(){ goView("tienda"); });
+document.querySelector('#historial [data-back="1"]').addEventListener("click", function(){ goView("tienda"); });
+document.getElementById("recAmt").addEventListener("input", function(){
+  var amt = parseInt(this.value, 10);
+  var user = currentUser ? currentUser.email.split("@")[0] : "";
+  var msg = "Hola, quiero recargar " + (amt > 0 ? "$" + amt + " MXN" : "saldo") + " a mi cuenta de la tienda. Usuario: " + user + ". Te envío mi comprobante.";
+  document.getElementById("recWa").href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+  var rb = document.getElementById("recBonus"), bono = promoBonus(amt);
+  if (bono > 0){ rb.className = "hint ok"; rb.textContent = "🎁 Recibirás $" + fmt(amt + bono) + " ($" + fmt(amt) + " + $" + fmt(bono) + " de bono)."; }
+  else if (PROMO_PCT > 0 && amt > 0){ rb.className = "hint"; rb.textContent = "Te faltan $" + fmt(PROMO_MIN - amt) + " para el bono de " + PROMO_PCT + "%."; }
+  else { rb.textContent = ""; }
+});
+var authMode = "login";
+document.getElementById("authSwitch").addEventListener("click", function(){
+  authMode = authMode === "login" ? "signup" : "login";
+  document.getElementById("authTitle").textContent = authMode === "login" ? "Inicia sesión" : "Crear cuenta";
+  document.getElementById("authGo").textContent = authMode === "login" ? "Entrar" : "Crear cuenta";
+  this.textContent = authMode === "login" ? "¿No tienes cuenta? Crear cuenta" : "¿Ya tienes cuenta? Inicia sesión";
+  document.getElementById("authMsg").textContent = "";
+});
+document.getElementById("authGo").addEventListener("click", function(){
+  var u = document.getElementById("user").value.trim().toLowerCase();
+  var p = document.getElementById("pass").value;
+  var msg = document.getElementById("authMsg");
+  if (!/^[a-z0-9_]{3,20}$/.test(u)){ msg.textContent = "Usuario: de 3 a 20 letras, números o guion bajo."; return; }
+  if (p.length < 6){ msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
+  var email = u + "@six7venstore.com";
+  var req = authMode === "login"
+    ? sb.auth.signInWithPassword({ email: email, password: p })
+    : sb.auth.signUp({ email: email, password: p });
+  req.then(function(r){
+    if (r.error){
+      msg.textContent = r.error.message === "Invalid login credentials"
+        ? "Usuario o contraseña incorrectos."
+        : "No se pudo: " + r.error.message;
+      return;
+    }
+    msg.textContent = "";
+    if (authMode === "signup" && !r.data.session){ msg.textContent = "Cuenta creada. Ahora inicia sesión."; }
+  });
+});
+
+sb.auth.onAuthStateChange(function(_event, session){
+  currentUser = session ? session.user : null;
+  loginBtn.textContent = currentUser ? "Salir" : "Iniciar sesión";
+  authBox.hidden = !!currentUser;
+  balBtn.hidden = !currentUser;
+  loginBtn.hidden = !!currentUser;
+  document.getElementById("menuSaldo").hidden = !currentUser;
+  document.getElementById("menuLogout").hidden = !currentUser;
+  if (!currentUser) goView("tienda");
+  document.body.classList.toggle("locked", !currentUser);
+  // Supabase recomienda no hacer consultas dentro de este aviso: se difieren un instante
+  document.getElementById("menuAdmin").hidden = true;
+  setTimeout(function(){ loadHistory(); loadBalance(update); checkAdmin(); }, 0);
+});
+
+function esc(v){
+  return String(v == null ? "" : v).replace(/[&<>"']/g, function(c){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+  });
+}
+function loadHistory(){
+  var list = document.getElementById("histList");
+  if (!currentUser){ list.textContent = "Inicia sesión para ver tus recargas."; return; }
+  list.textContent = "Cargando tus recargas...";
+  sb.from("orders").select("*").order("created_at", { ascending: false }).then(function(r){
+    if (r.error){ list.textContent = "No se pudo cargar el historial (" + r.error.message + ")."; return; }
+    if (!r.data.length){ list.textContent = "Todavía no tienes recargas."; return; }
+    list.innerHTML = r.data.map(function(o){
+      var st = String(o.status || "pendiente"), stl = st.toLowerCase();
+      var cls = /complet|exitos|entregad/.test(stl) ? "ok" : /revisi|pendien|proces/.test(stl) ? "wait" : /fall|error|cancel|rechaz/.test(stl) ? "bad" : "";
+      var d = new Date(o.created_at);
+      var when = d.toLocaleDateString("es-MX", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " +
+                 d.toLocaleTimeString("es-MX", { hour:"2-digit", minute:"2-digit", hour12:true });
+      return '<div class="hist-card">' +
+        '<div class="hc-main">' +
+          '<div class="hc-title">' + esc(o.diamonds) + ' Diamantes + ' + esc(o.bonus) + ' Bono</div>' +
+          '<div class="hc-date">' + esc(when) + '</div>' +
+          '<div class="hc-id">ID: <b>' + esc(o.player_id) + '</b></div>' +
+          '<span class="hc-method">' + esc(o.method || "Saldo") + '</span>' +
+        '</div>' +
+        '<div class="hc-side">' +
+          '<div class="hc-price">$' + esc(Number(o.price).toFixed(2)) + ' <small>MXN</small></div>' +
+          '<span class="hc-status ' + cls + '">' + esc(st.charAt(0).toUpperCase() + st.slice(1)) + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }).catch(function(err){
+    list.textContent = "No se pudo mostrar el historial (" + (err && err.message ? err.message : "error") + ").";
+  });
+}
+
+/* ===== Movimientos de saldo (cliente) ===== */
+var KIND_LABEL = { recarga: "Recarga de saldo", bono: "Bono de promoción", ajuste: "Ajuste de saldo" };
+function fmtDate(s){
+  var d = new Date(s);
+  return d.toLocaleDateString("es-MX", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " +
+         d.toLocaleTimeString("es-MX", { hour:"2-digit", minute:"2-digit", hour12:true });
+}
+function movRow(title, sub, amount, after){
+  var a = Number(amount);
+  return '<div class="mov"><div class="mov-l"><div class="mov-t">' + esc(title) + '</div><div class="mov-s">' + sub + '</div></div>' +
+    '<div class="mov-r"><div class="mov-a ' + (a < 0 ? "neg" : "pos") + '">' + (a < 0 ? "−$" : "+$") + esc(fmt(Math.abs(a))) + '</div>' +
+    (after != null ? '<div class="mov-b">Saldo: $' + esc(fmt(after)) + '</div>' : '') + '</div></div>';
+}
+function loadMovements(){
+  var list = document.getElementById("movList");
+  if (!currentUser){ list.textContent = "Inicia sesión para ver tus movimientos."; return; }
+  list.textContent = "Cargando...";
+  sb.from("balance_movements").select("amount, balance_after, kind, note, created_at")
+    .order("id", { ascending: false }).limit(30).then(function(r){
+      if (r.error){ list.textContent = "No se pudieron cargar tus movimientos."; return; }
+      if (!r.data.length){ list.textContent = "Todavía no tienes movimientos."; return; }
+      list.innerHTML = r.data.map(function(m){
+        return movRow(KIND_LABEL[m.kind] || m.kind, esc(fmtDate(m.created_at)), m.amount, m.balance_after);
+      }).join("");
+    }).catch(function(){ list.textContent = "No se pudieron cargar tus movimientos."; });
+}
+
+/* ===== Panel de administrador ===== */
+var isAdmin = false, admSel = null;
+function checkAdmin(){
+  isAdmin = false;
+  document.getElementById("menuAdmin").hidden = true;
+  if (!currentUser) return;
+  sb.rpc("es_admin").then(function(r){
+    isAdmin = !r.error && r.data === true;
+    document.getElementById("menuAdmin").hidden = !isAdmin;
+  });
+}
+function admSearch(){
+  var q = document.getElementById("admQ").value.trim().toLowerCase(), msg = document.getElementById("admQMsg"),
+      box = document.getElementById("admResults");
+  box.innerHTML = "";
+  if (q.length < 2){ msg.className = "hint err"; msg.textContent = "Escribe al menos 2 letras del usuario."; return; }
+  msg.className = "hint"; msg.textContent = "Buscando...";
+  sb.rpc("admin_buscar_cliente", { p_usuario: q }).then(function(r){
+    if (r.error){ msg.className = "hint err"; msg.textContent = "Error: " + r.error.message; return; }
+    if (!r.data.length){ msg.className = "hint err"; msg.textContent = "No encontré clientes con ese usuario."; return; }
+    msg.textContent = "";
+    box.innerHTML = r.data.map(function(c, i){
+      return '<button type="button" class="adm-res" data-i="' + i + '">' + esc(c.usuario) + ' <span>Saldo: $' + esc(fmt(c.saldo)) + '</span></button>';
+    }).join("");
+    box._data = r.data;
+    if (r.data.length === 1) admPick(r.data[0]);
+  });
+}
+function admPick(c){
+  admSel = c;
+  document.getElementById("admUser").textContent = c.usuario;
+  document.getElementById("admBal").textContent = fmt(c.saldo);
+  document.getElementById("admForm").hidden = false;
+  document.getElementById("admMsg").textContent = "";
+  Array.prototype.forEach.call(document.querySelectorAll(".adm-res"), function(b){
+    b.classList.toggle("sel", b.textContent.indexOf(c.usuario + " ") === 0);
+  });
+  admPreview();
+  document.getElementById("admAmt").focus();
+}
+function admPreview(){
+  var p = document.getElementById("admPreview"), amt = Number(document.getElementById("admAmt").value);
+  if (!admSel || !amt){ p.textContent = ""; return; }
+  var bono = document.getElementById("admBonus").checked && amt > 0 ? promoBonus(amt) : 0;
+  var nuevo = Number(admSel.saldo) + amt + bono;
+  p.innerHTML = (amt > 0 ? "Se agregan <b>$" + fmt(amt) + "</b>" : "Se restan <b style=\"color:#f87171\">$" + fmt(-amt) + "</b>") +
+    (bono ? " + bono <b style=\"color:#facc15\">$" + fmt(bono) + "</b>" : "") +
+    "<br>Saldo nuevo: <b>$" + fmt(Math.round(nuevo * 100) / 100) + " MXN</b>" +
+    (nuevo < 0 ? '<br><b style="color:#f87171">El saldo no puede quedar negativo.</b>' : "");
+}
+function admGo(){
+  var btn = document.getElementById("admGo"), msg = document.getElementById("admMsg");
+  var amt = Number(document.getElementById("admAmt").value), note = document.getElementById("admNote").value.trim();
+  var bonus = document.getElementById("admBonus").checked;
+  if (!admSel){ return; }
+  if (!amt){ msg.className = "hint err"; msg.textContent = "Escribe un monto."; return; }
+  var b = bonus && amt > 0 ? promoBonus(amt) : 0;
+  var txt = (amt > 0 ? "¿Agregar $" + fmt(amt) : "¿Restar $" + fmt(-amt)) + (b ? " + $" + fmt(b) + " de bono" : "") +
+            " a " + admSel.usuario + "?";
+  if (!window.confirm(txt)) return;
+  btn.disabled = true; msg.className = "hint"; msg.textContent = "Guardando...";
+  sb.rpc("admin_mover_saldo", { p_user_id: admSel.user_id, p_monto: amt, p_nota: note || null, p_bono: bonus }).then(function(r){
+    btn.disabled = false;
+    if (r.error){ msg.className = "hint err"; msg.textContent = "No se pudo: " + r.error.message; return; }
+    var row = Array.isArray(r.data) ? r.data[0] : r.data;
+    admSel.saldo = Number(row.saldo_nuevo);
+    document.getElementById("admBal").textContent = fmt(admSel.saldo);
+    msg.className = "hint ok";
+    msg.textContent = "✅ Listo. Nuevo saldo de " + admSel.usuario + ": $" + fmt(admSel.saldo) +
+      (Number(row.bono_dado) > 0 ? " (incluye $" + fmt(row.bono_dado) + " de bono)" : "") + ".";
+    document.getElementById("admAmt").value = "";
+    document.getElementById("admNote").value = "";
+    admPreview();
+    loadAdminMovs();
+    if (currentUser && admSel.user_id === currentUser.id) loadBalance(update);
+  });
+}
+function loadAdminMovs(){
+  var list = document.getElementById("admMovs");
+  if (!isAdmin){ list.textContent = "—"; return; }
+  list.textContent = "Cargando...";
+  sb.rpc("admin_ultimos_movimientos", { p_limite: 25 }).then(function(r){
+    if (r.error){ list.textContent = "No se pudieron cargar: " + r.error.message; return; }
+    if (!r.data.length){ list.textContent = "Todavía no hay movimientos."; return; }
+    list.innerHTML = r.data.map(function(m){
+      return movRow(m.usuario + " · " + (KIND_LABEL[m.tipo] || m.tipo),
+        esc(fmtDate(m.fecha)) + (m.nota ? " · " + esc(m.nota) : ""), m.monto, m.saldo_despues);
+    }).join("");
+  });
+}
+document.getElementById("admSearch").addEventListener("click", admSearch);
+document.getElementById("admQ").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); admSearch(); } });
+document.getElementById("admResults").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest(".adm-res") : null;
+  if (b && this._data) admPick(this._data[+b.getAttribute("data-i")]);
+});
+document.getElementById("admAmt").addEventListener("input", admPreview);
+document.getElementById("admBonus").addEventListener("change", admPreview);
+document.getElementById("admGo").addEventListener("click", admGo);
+
+var myBalance = null;
+function setBal(v){
+  document.getElementById("balAmt").textContent = "$" + v;
+  document.getElementById("recSaldo").textContent = v;
+}
+function loadBalance(done){
+  if (!currentUser){ myBalance = null; setBal(0); if (done) done(); return; }
+  sb.from("balances").select("amount").eq("user_id", currentUser.id).maybeSingle().then(function(r){
+    myBalance = (!r.error && r.data) ? Number(r.data.amount) : 0;
+    setBal(myBalance);
+    if (done) done();
+  });
+}
+function payWithBalance(btn){
+  var k = PACKS[sel], id = pid.value.trim(), box = document.getElementById("payPanel");
+  if (!currentUser || !validId(id)) return;
+  if (VERIFY_ID && verified.id !== id) return;
+  btn.disabled = true;
+  box.innerHTML = '<b>Procesando tu pedido...</b>';
+  sb.auth.getSession().then(function(s){
+    var token = s.data.session ? s.data.session.access_token : "";
+    return fetch(SUPABASE_URL + "/functions/v1/comprar-recarga", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": SUPABASE_KEY },
+      body: JSON.stringify({ diamonds: k.d, player_id: id })
+    });
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if (!j.ok){
+      box.innerHTML = '<b style="color:#ef4444">No se pudo pagar:</b> ' + (j.error || "Intenta de nuevo.");
+      btn.disabled = false;
+      return;
+    }
+    var flash = document.getElementById("histFlash");
+    if (j.status === "en revisión"){
+      flash.className = "hist-flash wait";
+      flash.innerHTML = '<b>⏳ Tu pedido de ' + k.d + ' diamantes quedó en revisión</b><br>' + esc(j.message || "Te confirmamos por WhatsApp.");
+    } else {
+      flash.className = "hist-flash ok";
+      flash.innerHTML = '<b>✅ ¡Recarga exitosa! ' + k.d + ' + ' + k.b + ' diamantes</b><br>Ya se enviaron al ID ' + esc(id) +
+        (verified.id === id && verified.name ? ' (' + esc(verified.name) + ')' : '') + '.';
+    }
+    flash.hidden = false;
+    btn.disabled = false;
+    pid.value = "";
+    resetVerify();
+    update();
+    loadBalance();
+    goView("historial");
+  }).catch(function(){
+    box.innerHTML = '<b style="color:#ef4444">Error de conexión.</b> Revisa tu historial antes de volver a intentar.';
+    btn.disabled = false;
+  });
+}
+
+function saveOrder(){
+  var k = PACKS[sel], id = pid.value.trim();
+  if (!currentUser || !validId(id)) return;
+  sb.from("orders").insert({ user_id: currentUser.id, diamonds: k.d, bonus: k.b, price: k.p, player_id: id, method: pay.value })
+    .then(function(r){ if (!r.error) loadHistory(); });
+}
+document.addEventListener("click", function(e){
+  if (!e.target.closest) return;
+  var b = e.target.closest("#payBalBtn");
+  if (b) payWithBalance(b);
+  if (e.target.closest("#goRecargar")) goView("recargar");
+});
+
+update();
+</script>
+</body>
+</html>
