@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Six7venStore | Diamantes Free Fire</title>
 <meta name="color-scheme" content="dark">
+<meta name="description" content="Recarga diamantes de Free Fire en minutos. Paga con saldo, entrega automática y soporte por WhatsApp.">
+<meta name="theme-color" content="#121214">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Six7venStore">
+<meta property="og:title" content="Six7venStore · Diamantes Free Fire">
+<meta property="og:description" content="Recarga diamantes en minutos. Entrega automática y soporte por WhatsApp.">
+<meta property="og:url" content="https://six7venstore.com/">
+<meta property="og:image" content="https://six7venstore.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'%3E%3Cg stroke='%23111113' stroke-width='9' stroke-linejoin='round'%3E%3Cpolygon points='50,10 150,10 130,65 70,65' fill='%23cdeeff'/%3E%3Cpolygon points='50,10 70,65 5,65' fill='%238fd8fa'/%3E%3Cpolygon points='150,10 195,65 130,65' fill='%238fd8fa'/%3E%3Cpolygon points='5,65 70,65 100,175' fill='%235cbcec'/%3E%3Cpolygon points='70,65 130,65 100,175' fill='%238fd8fa'/%3E%3Cpolygon points='130,65 195,65 100,175' fill='%233b97d3'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="og-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -109,6 +122,39 @@ main{padding:28px 0 8px}
 body.locked main > *:not(#authBox), body.locked footer, body.locked .notice, body.locked .menu-btn, body.locked .menu{display:none}
 .hint{font-size:14px;color:var(--muted);margin-top:6px}
 .hint:empty{display:none}
+.hint.ok{color:#22c55e}
+.trust{list-style:none;margin:14px auto 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;max-width:860px}
+.trust li{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:7px 10px;font-size:12.5px;font-weight:600;color:#d6d6dc;text-align:center;line-height:1.3}
+.trust li[hidden]{display:none}
+.trust b{color:#22c55e}
+.sub-h{margin:26px 0 12px;font-size:19px}
+.link-back{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px}
+.promo{margin:4px 0 16px;padding:12px 14px;border-radius:14px;background:#2a2410;border:1.5px solid #a16207;color:#fde68a;font-size:15px}
+.promo b{color:#facc15}
+.promo[hidden]{display:none}
+.mov-list{display:grid;gap:8px}
+.mov{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#0b0c0e;border:1.5px solid #1f2a2a;border-radius:14px;padding:11px 14px}
+.mov-l{min-width:0}
+.mov-t{font-weight:700;font-size:15px}
+.mov-s{color:var(--muted);font-size:13px;word-break:break-word}
+.mov-r{text-align:right;flex:none}
+.mov-a{font-weight:800;font-size:17px;white-space:nowrap}
+.mov-a.pos{color:#22c55e} .mov-a.neg{color:#f87171}
+.mov-b{color:var(--muted);font-size:12px;white-space:nowrap}
+.adm-results{display:grid;gap:8px;margin-top:10px}
+.adm-results:empty{display:none}
+.adm-res{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:#0b0c0e;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--ink);font:600 15px "Outfit",sans-serif;cursor:pointer}
+.adm-res:hover,.adm-res.sel{border-color:#3b82f6}
+.adm-res span{color:var(--muted);font-weight:400}
+.adm-form{margin-top:6px;padding:16px;border-radius:18px;background:var(--card);border:1.5px solid var(--line)}
+.adm-form[hidden]{display:none}
+.adm-client{margin-bottom:14px;font-size:16px;line-height:1.6}
+.adm-check{display:flex;gap:8px;align-items:center;font-weight:600;margin:-4px 0 12px;cursor:pointer}
+.adm-check input{width:18px;height:18px}
+.adm-preview{padding:10px 12px;border-radius:12px;background:#2d2d33;font-size:15px;line-height:1.5}
+.adm-preview:empty{display:none}
+.adm-go{width:100%;border:0;font:inherit;font-weight:700;cursor:pointer}
+.adm-go:disabled{opacity:.5;cursor:default}
 .hint.err{color:var(--err)}
 dl{margin:0 0 18px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
 dt{color:var(--muted)} dd{margin:0;text-align:right;font-weight:600}
@@ -158,6 +204,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
       <a href="#paquetes">Recargas</a>
       <a href="#historial">Historial de recargas</a>
       <a href="#" id="menuSaldo" hidden>Saldo</a>
+      <a href="#" id="menuAdmin" hidden>Panel admin</a>
       <a href="#" id="menuLogout" hidden>Cerrar sesión</a>
     </nav>
   </div>
@@ -166,6 +213,14 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
       
       <p><b>SOPORTE AL WHATSAPP: <span id="waShow"></span></b></p>
     </div>
+  </div>
+  <div class="wrap">
+    <ul class="trust" aria-label="Por qué comprar aquí">
+      <li>⚡ Entrega en 1–2 min</li>
+      <li>🔒 Pago seguro con saldo</li>
+      <li>💬 Soporte por WhatsApp</li>
+      <li id="trustCount" hidden>💎 <b id="trustN"></b> recargas entregadas</li>
+    </ul>
   </div>
 </header>
 
@@ -231,12 +286,51 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
     <button id="recBack" type="button" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
     <h2>Recargar saldo</h2>
     <p>Saldo actual: <b>$<span id="recSaldo">0</span> MXN</b></p>
-    <div class="field"><label for="recAmt">Monto a recargar (MXN)</label><input id="recAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 100"></div>
+    <div class="promo" id="promoBox">🎁 <b>Recarga $<span class="promo-min"></span> o más y te regalamos <span class="promo-pct"></span>% extra</b> de saldo.</div>
+    <div class="field"><label for="recAmt">Monto a recargar (MXN)</label><input id="recAmt" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej. 100">
+      <div class="hint" id="recBonus"></div></div>
     <div class="paypanel" style="display:block;font-size:19px;line-height:1.6"><b style="font-size:21px">Transferencia bancaria MX</b><br>
       Cuenta / CLABE:<br><b style="font-size:22px;letter-spacing:1px;word-break:break-all">722969010405445129</b><br>
       Titular: <b>Henry Barcenas</b><br>Banco: <b>Mercado Pago W</b></div>
     <div class="hint" style="font-size:16px">Después de transferir, envía tu comprobante por WhatsApp con el monto.</div>
     <a class="paybtn" id="recWa" href="#" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px">Enviar comprobante por WhatsApp</a>
+    <h3 class="sub-h">Tus movimientos de saldo</h3>
+    <div id="movList" class="mov-list">Todavía no tienes movimientos.</div>
+  </section>
+
+  <section class="box" id="admin" hidden style="margin-bottom:22px">
+    <button type="button" class="link-back" id="admBack">← Volver a la tienda</button>
+    <h2>Panel de administrador</h2>
+    <p class="psub" style="margin:-8px 0 16px">Cargar o corregir saldo de clientes.</p>
+
+    <div class="field">
+      <label for="admQ">Buscar cliente por usuario</label>
+      <div class="pid-row">
+        <input id="admQ" type="text" autocomplete="off" placeholder="Ej. juan123">
+        <button type="button" class="verify-btn" id="admSearch">Buscar</button>
+      </div>
+      <div class="hint" id="admQMsg"></div>
+      <div id="admResults" class="adm-results"></div>
+    </div>
+
+    <div id="admForm" class="adm-form" hidden>
+      <div class="adm-client">Cliente: <b id="admUser"></b><br>Saldo actual: <b>$<span id="admBal">0</span> MXN</b></div>
+      <div class="field">
+        <label for="admAmt">Monto (MXN)</label>
+        <input id="admAmt" type="number" step="1" inputmode="decimal" placeholder="Ej. 200  (o -50 para restar)">
+      </div>
+      <div class="field">
+        <label for="admNote">Nota (opcional)</label>
+        <input id="admNote" type="text" maxlength="120" placeholder="Ej. Transferencia BBVA 26/10">
+      </div>
+      <label class="adm-check"><input type="checkbox" id="admBonus" checked> Aplicar bono de promoción</label>
+      <div class="adm-preview" id="admPreview"></div>
+      <button type="button" class="paybtn adm-go" id="admGo">Confirmar</button>
+      <div class="hint" id="admMsg"></div>
+    </div>
+
+    <h3 class="sub-h">Últimos movimientos</h3>
+    <div id="admMovs" class="mov-list">—</div>
   </section>
 </main>
 
@@ -252,6 +346,8 @@ var QR_URL    = "qr-oxxo.jpg";                               // URL de la imagen
 var SUPABASE_URL = "https://gspwhmueszdaytwqsiqi.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcHdobXVlc3pkYXl0d3FzaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjI1ODMsImV4cCI6MjEwODI5ODU4M30.L9vHkvWL-RIgtrfU6bpA18IB6DdaelqRgApwj6IQ238";
 var VERIFY_ID = false; // ← cámbialo a true cuando la función "verificar-jugador" esté lista en Supabase
+var PROMO_MIN = 500;   // bono de saldo: a partir de este monto...
+var PROMO_PCT = 3;     // ...se regala este % extra (pon 0 para quitar la promo). Debe coincidir con el SQL.
 var currentUser = null;
 var PACKS = [  // d = diamantes, b = bono, p = precio
   {d:100,  b:10,  p:15},
@@ -266,6 +362,11 @@ var PACKS = [  // d = diamantes, b = bono, p = precio
 document.getElementById("waShow").textContent = "+" + WHATSAPP;
 
 var money = function(n){ return "$" + n; };
+function fmt(n){ n = Number(n) || 0; return n % 1 ? n.toFixed(2) : String(n); }
+function promoBonus(amt){ return PROMO_PCT > 0 && amt >= PROMO_MIN ? Math.round(amt * PROMO_PCT) / 100 : 0; }
+document.getElementById("promoBox").hidden = !(PROMO_PCT > 0);
+Array.prototype.forEach.call(document.querySelectorAll(".promo-min"), function(e){ e.textContent = PROMO_MIN; });
+Array.prototype.forEach.call(document.querySelectorAll(".promo-pct"), function(e){ e.textContent = PROMO_PCT; });
 var sel = 0, packsEl = document.getElementById("packs");
 
 PACKS.forEach(function(k, i){
@@ -401,6 +502,16 @@ menuBtn.addEventListener("click", function(){
 });
 
 var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Contador público de recargas entregadas (se muestra a partir de 20 para no verse vacío)
+var MIN_CONTADOR = 20;
+sb.rpc("recargas_entregadas").then(function(r){
+  var n = r && !r.error ? Number(r.data) : 0;
+  if (n >= MIN_CONTADOR){
+    document.getElementById("trustN").textContent = "+" + n.toLocaleString("es-MX");
+    document.getElementById("trustCount").hidden = false;
+  }
+}, function(){});
 var loginBtn = document.getElementById("loginBtn"), authBox = document.getElementById("authBox");
 
 loginBtn.addEventListener("click", function(){
@@ -409,7 +520,7 @@ loginBtn.addEventListener("click", function(){
 });
 var balBtn = document.getElementById("balBtn");
 function goView(v){
-  var subViews = ["recargar", "historial"];
+  var subViews = ["recargar", "historial", "admin"];
   Array.prototype.forEach.call(document.querySelectorAll("main > *"), function(el){
     if (el.id === "authBox") return;
     if (subViews.indexOf(el.id) !== -1){ el.hidden = el.id !== v; return; }
@@ -417,6 +528,8 @@ function goView(v){
   });
   if (v !== "historial") document.getElementById("histFlash").hidden = true;
   if (v === "historial") loadHistory();
+  if (v === "recargar") loadMovements();
+  if (v === "admin") loadAdminMovs();
   window.scrollTo(0, 0);
 }
 balBtn.addEventListener("click", function(){ goView("recargar"); });
@@ -432,6 +545,8 @@ Array.prototype.forEach.call(document.querySelectorAll('#menu a[href="#paquetes"
     goView(a.getAttribute("href") === "#historial" ? "historial" : "tienda");
   });
 });
+document.getElementById("menuAdmin").addEventListener("click", function(e){ e.preventDefault(); closeMenu(); goView("admin"); });
+document.getElementById("admBack").addEventListener("click", function(){ goView("tienda"); });
 document.getElementById("recBack").addEventListener("click", function(){ goView("tienda"); });
 document.querySelector('#historial [data-back="1"]').addEventListener("click", function(){ goView("tienda"); });
 document.getElementById("recAmt").addEventListener("input", function(){
@@ -439,6 +554,10 @@ document.getElementById("recAmt").addEventListener("input", function(){
   var user = currentUser ? currentUser.email.split("@")[0] : "";
   var msg = "Hola, quiero recargar " + (amt > 0 ? "$" + amt + " MXN" : "saldo") + " a mi cuenta de la tienda. Usuario: " + user + ". Te envío mi comprobante.";
   document.getElementById("recWa").href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
+  var rb = document.getElementById("recBonus"), bono = promoBonus(amt);
+  if (bono > 0){ rb.className = "hint ok"; rb.textContent = "🎁 Recibirás $" + fmt(amt + bono) + " ($" + fmt(amt) + " + $" + fmt(bono) + " de bono)."; }
+  else if (PROMO_PCT > 0 && amt > 0){ rb.className = "hint"; rb.textContent = "Te faltan $" + fmt(PROMO_MIN - amt) + " para el bono de " + PROMO_PCT + "%."; }
+  else { rb.textContent = ""; }
 });
 var authMode = "login";
 document.getElementById("authSwitch").addEventListener("click", function(){
@@ -481,7 +600,8 @@ sb.auth.onAuthStateChange(function(_event, session){
   if (!currentUser) goView("tienda");
   document.body.classList.toggle("locked", !currentUser);
   // Supabase recomienda no hacer consultas dentro de este aviso: se difieren un instante
-  setTimeout(function(){ loadHistory(); loadBalance(update); }, 0);
+  document.getElementById("menuAdmin").hidden = true;
+  setTimeout(function(){ loadHistory(); loadBalance(update); checkAdmin(); }, 0);
 });
 
 function esc(v){
@@ -519,6 +639,133 @@ function loadHistory(){
     list.textContent = "No se pudo mostrar el historial (" + (err && err.message ? err.message : "error") + ").";
   });
 }
+
+/* ===== Movimientos de saldo (cliente) ===== */
+var KIND_LABEL = { recarga: "Recarga de saldo", bono: "Bono de promoción", ajuste: "Ajuste de saldo" };
+function fmtDate(s){
+  var d = new Date(s);
+  return d.toLocaleDateString("es-MX", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " +
+         d.toLocaleTimeString("es-MX", { hour:"2-digit", minute:"2-digit", hour12:true });
+}
+function movRow(title, sub, amount, after){
+  var a = Number(amount);
+  return '<div class="mov"><div class="mov-l"><div class="mov-t">' + esc(title) + '</div><div class="mov-s">' + sub + '</div></div>' +
+    '<div class="mov-r"><div class="mov-a ' + (a < 0 ? "neg" : "pos") + '">' + (a < 0 ? "−$" : "+$") + esc(fmt(Math.abs(a))) + '</div>' +
+    (after != null ? '<div class="mov-b">Saldo: $' + esc(fmt(after)) + '</div>' : '') + '</div></div>';
+}
+function loadMovements(){
+  var list = document.getElementById("movList");
+  if (!currentUser){ list.textContent = "Inicia sesión para ver tus movimientos."; return; }
+  list.textContent = "Cargando...";
+  sb.from("balance_movements").select("amount, balance_after, kind, note, created_at")
+    .order("id", { ascending: false }).limit(30).then(function(r){
+      if (r.error){ list.textContent = "No se pudieron cargar tus movimientos."; return; }
+      if (!r.data.length){ list.textContent = "Todavía no tienes movimientos."; return; }
+      list.innerHTML = r.data.map(function(m){
+        return movRow(KIND_LABEL[m.kind] || m.kind, esc(fmtDate(m.created_at)), m.amount, m.balance_after);
+      }).join("");
+    }).catch(function(){ list.textContent = "No se pudieron cargar tus movimientos."; });
+}
+
+/* ===== Panel de administrador ===== */
+var isAdmin = false, admSel = null;
+function checkAdmin(){
+  isAdmin = false;
+  document.getElementById("menuAdmin").hidden = true;
+  if (!currentUser) return;
+  sb.rpc("es_admin").then(function(r){
+    isAdmin = !r.error && r.data === true;
+    document.getElementById("menuAdmin").hidden = !isAdmin;
+  });
+}
+function admSearch(){
+  var q = document.getElementById("admQ").value.trim().toLowerCase(), msg = document.getElementById("admQMsg"),
+      box = document.getElementById("admResults");
+  box.innerHTML = "";
+  if (q.length < 2){ msg.className = "hint err"; msg.textContent = "Escribe al menos 2 letras del usuario."; return; }
+  msg.className = "hint"; msg.textContent = "Buscando...";
+  sb.rpc("admin_buscar_cliente", { p_usuario: q }).then(function(r){
+    if (r.error){ msg.className = "hint err"; msg.textContent = "Error: " + r.error.message; return; }
+    if (!r.data.length){ msg.className = "hint err"; msg.textContent = "No encontré clientes con ese usuario."; return; }
+    msg.textContent = "";
+    box.innerHTML = r.data.map(function(c, i){
+      return '<button type="button" class="adm-res" data-i="' + i + '">' + esc(c.usuario) + ' <span>Saldo: $' + esc(fmt(c.saldo)) + '</span></button>';
+    }).join("");
+    box._data = r.data;
+    if (r.data.length === 1) admPick(r.data[0]);
+  });
+}
+function admPick(c){
+  admSel = c;
+  document.getElementById("admUser").textContent = c.usuario;
+  document.getElementById("admBal").textContent = fmt(c.saldo);
+  document.getElementById("admForm").hidden = false;
+  document.getElementById("admMsg").textContent = "";
+  Array.prototype.forEach.call(document.querySelectorAll(".adm-res"), function(b){
+    b.classList.toggle("sel", b.textContent.indexOf(c.usuario + " ") === 0);
+  });
+  admPreview();
+  document.getElementById("admAmt").focus();
+}
+function admPreview(){
+  var p = document.getElementById("admPreview"), amt = Number(document.getElementById("admAmt").value);
+  if (!admSel || !amt){ p.textContent = ""; return; }
+  var bono = document.getElementById("admBonus").checked && amt > 0 ? promoBonus(amt) : 0;
+  var nuevo = Number(admSel.saldo) + amt + bono;
+  p.innerHTML = (amt > 0 ? "Se agregan <b>$" + fmt(amt) + "</b>" : "Se restan <b style=\"color:#f87171\">$" + fmt(-amt) + "</b>") +
+    (bono ? " + bono <b style=\"color:#facc15\">$" + fmt(bono) + "</b>" : "") +
+    "<br>Saldo nuevo: <b>$" + fmt(Math.round(nuevo * 100) / 100) + " MXN</b>" +
+    (nuevo < 0 ? '<br><b style="color:#f87171">El saldo no puede quedar negativo.</b>' : "");
+}
+function admGo(){
+  var btn = document.getElementById("admGo"), msg = document.getElementById("admMsg");
+  var amt = Number(document.getElementById("admAmt").value), note = document.getElementById("admNote").value.trim();
+  var bonus = document.getElementById("admBonus").checked;
+  if (!admSel){ return; }
+  if (!amt){ msg.className = "hint err"; msg.textContent = "Escribe un monto."; return; }
+  var b = bonus && amt > 0 ? promoBonus(amt) : 0;
+  var txt = (amt > 0 ? "¿Agregar $" + fmt(amt) : "¿Restar $" + fmt(-amt)) + (b ? " + $" + fmt(b) + " de bono" : "") +
+            " a " + admSel.usuario + "?";
+  if (!window.confirm(txt)) return;
+  btn.disabled = true; msg.className = "hint"; msg.textContent = "Guardando...";
+  sb.rpc("admin_mover_saldo", { p_user_id: admSel.user_id, p_monto: amt, p_nota: note || null, p_bono: bonus }).then(function(r){
+    btn.disabled = false;
+    if (r.error){ msg.className = "hint err"; msg.textContent = "No se pudo: " + r.error.message; return; }
+    var row = Array.isArray(r.data) ? r.data[0] : r.data;
+    admSel.saldo = Number(row.saldo_nuevo);
+    document.getElementById("admBal").textContent = fmt(admSel.saldo);
+    msg.className = "hint ok";
+    msg.textContent = "✅ Listo. Nuevo saldo de " + admSel.usuario + ": $" + fmt(admSel.saldo) +
+      (Number(row.bono_dado) > 0 ? " (incluye $" + fmt(row.bono_dado) + " de bono)" : "") + ".";
+    document.getElementById("admAmt").value = "";
+    document.getElementById("admNote").value = "";
+    admPreview();
+    loadAdminMovs();
+    if (currentUser && admSel.user_id === currentUser.id) loadBalance(update);
+  });
+}
+function loadAdminMovs(){
+  var list = document.getElementById("admMovs");
+  if (!isAdmin){ list.textContent = "—"; return; }
+  list.textContent = "Cargando...";
+  sb.rpc("admin_ultimos_movimientos", { p_limite: 25 }).then(function(r){
+    if (r.error){ list.textContent = "No se pudieron cargar: " + r.error.message; return; }
+    if (!r.data.length){ list.textContent = "Todavía no hay movimientos."; return; }
+    list.innerHTML = r.data.map(function(m){
+      return movRow(m.usuario + " · " + (KIND_LABEL[m.tipo] || m.tipo),
+        esc(fmtDate(m.fecha)) + (m.nota ? " · " + esc(m.nota) : ""), m.monto, m.saldo_despues);
+    }).join("");
+  });
+}
+document.getElementById("admSearch").addEventListener("click", admSearch);
+document.getElementById("admQ").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); admSearch(); } });
+document.getElementById("admResults").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest(".adm-res") : null;
+  if (b && this._data) admPick(this._data[+b.getAttribute("data-i")]);
+});
+document.getElementById("admAmt").addEventListener("input", admPreview);
+document.getElementById("admBonus").addEventListener("change", admPreview);
+document.getElementById("admGo").addEventListener("click", admGo);
 
 var myBalance = null;
 function setBal(v){
