@@ -50,6 +50,9 @@ svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-l
 .menu{position:absolute;right:14px;top:100px;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:8px;min-width:210px;z-index:5}
 .menu[hidden]{display:none}
 .menu a[hidden]{display:none}
+.menu-user{margin-top:6px;padding:12px 14px 6px;border-top:1.5px solid var(--line);color:var(--muted);font-size:14px;word-break:break-all}
+.menu-user[hidden]{display:none}
+.menu-user b{color:#fff;font-weight:700}
 .menu a{display:block;padding:12px 14px;border-radius:10px;text-decoration:none;font-weight:600}
 .menu a:hover{background:var(--cyan-d)}
 
@@ -216,6 +219,7 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
       <a href="#historial">Historial de recargas</a>
       <a href="#" id="menuSaldo" hidden>Saldo</a>
       <a href="#" id="menuAdmin" hidden>Panel admin</a>
+      <div class="menu-user" id="userLine" hidden>Sesión: <b id="userName"></b></div>
       <a href="#" id="menuLogout" hidden>Cerrar sesión</a>
     </nav>
   </div>
@@ -580,6 +584,8 @@ sb.auth.onAuthStateChange(function(_event, session){
   loginBtn.hidden = !!currentUser;
   document.getElementById("menuSaldo").hidden = !currentUser;
   document.getElementById("menuLogout").hidden = !currentUser;
+  document.getElementById("userName").textContent = currentUser ? currentUser.email.split("@")[0] : "";
+  document.getElementById("userLine").hidden = !currentUser;
   if (!currentUser) goView("tienda");
   document.body.classList.toggle("locked", !currentUser);
   // Supabase recomienda no hacer consultas dentro de este aviso: se difieren un instante
