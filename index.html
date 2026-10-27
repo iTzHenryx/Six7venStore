@@ -186,12 +186,6 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
     </div>
   </form>
 
-  <section id="faq">
-    <h2>Preguntas frecuentes</h2>
-    <details><summary>¿Necesitan mi contraseña?</summary><p>No. Solo pedimos tu ID de jugador. Nunca compartas tu contraseña ni códigos de verificación con nadie.</p></details>
-    <details><summary>¿Cuánto tarda la recarga?</summary><p>Las recargas se realizan de 1 a 2 minutos.</p></details>
-    <details><summary>¿Dónde encuentro mi ID?</summary><p>Abre Free Fire y entra a tu perfil. El número aparece junto a tu nombre de jugador.</p></details>
-  </section>
   <section class="box" id="historial" hidden style="margin-bottom:22px">
     <button type="button" class="back-link" data-back="1" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0;margin-bottom:12px">← Volver a la tienda</button>
     <h2>Historial de recargas</h2>
@@ -210,9 +204,6 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px;text-align:center}
   </section>
 </main>
 
-<footer>
-  <div class="wrap"><span id="fName">Henry Store</span> es una tienda independiente. No está afiliada a Garena. Free Fire es una marca de Garena.</div>
-</footer>
 
 <script>
 /* ===== Edita aquí ===== */
@@ -235,7 +226,6 @@ var PACKS = [  // d = diamantes, b = bono, p = precio
 ];
 /* ====================== */
 
-document.getElementById("fName").textContent = STORE_NAME;
 document.getElementById("waShow").textContent = "+" + WHATSAPP;
 
 var money = function(n){ return "$" + n; };
@@ -405,7 +395,25 @@ function loadHistory(){
     if (r.error){ list.textContent = "No se pudo cargar el historial."; return; }
     if (!r.data.length){ list.textContent = "Todavía no tienes recargas."; return; }
     list.innerHTML = r.data.map(function(o){
-      return '<div class="hist-row"><b>' + o.diamonds + ' diamantes + ' + o.bonus + ' bono</b> · $' + o.price + ' MXN<br><small>ID ' + o.player_id + ' · ' + o.method + ' · ' + o.status + ' · ' + new Date(o.created_at).toLocaleString("es-MX") + '</small></div>';
+      var st = String(o.status || "pendiente"), stl = st.toLowerCase();
+      var cls = /complet|exitos|entregad/.test(stl) ? "ok" : /revisi|pendien|proces/.test(stl) ? "wait" : /fall|error|cancel|rechaz/.test(stl) ? "bad" : "";
+      var num = String(o.id || "");
+      if (num.length > 8) num = num.replace(/-/g, "").slice(-6).toUpperCase();
+      var d = new Date(o.created_at);
+      var when = d.toLocaleDateString("es-MX", { day:"2-digit", month:"2-digit", year:"numeric" }) + ", " +
+                 d.toLocaleTimeString("es-MX", { hour:"2-digit", minute:"2-digit", hour12:true });
+      return '<div class="hist-card">' +
+        '<div class="hc-main">' +
+          '<div class="hc-title">' + esc(o.diamonds) + ' Diamantes + ' + esc(o.bonus) + ' Bono' + (num ? ' <span class="hc-num">#' + esc(num) + '</span>' : '') + '</div>' +
+          '<div class="hc-date">' + esc(when) + '</div>' +
+          '<div class="hc-id">ID: <b>' + esc(o.player_id) + '</b></div>' +
+          '<span class="hc-method">' + esc(o.method || "Saldo") + '</span>' +
+        '</div>' +
+        '<div class="hc-side">' +
+          '<div class="hc-price">$' + esc(Number(o.price).toFixed(2)) + ' <small>MXN</small></div>' +
+          '<span class="hc-status ' + cls + '">' + esc(st.charAt(0).toUpperCase() + st.slice(1)) + '</span>' +
+        '</div>' +
+      '</div>';
     }).join("");
   });
 }
