@@ -101,6 +101,7 @@ main{padding:28px 0 8px}
 .pid-name.ok{border-color:#16a34a;background:#0b3d1f;color:#bbf7d0}
 .pid-name.ok b{color:#22c55e}
 .pid-name.bad{border-color:#b91c1c;background:#3d0b0b;color:#fecaca}
+.pid-name.warn{border-color:#ca8a04;background:#3d2e0b;color:#fde68a}
 .paypanel{margin-top:14px;padding:14px;border-radius:14px;background:#2d2d33;border:1.5px solid var(--line);font-size:15px;line-height:1.5;display:none}
 .paybtn{display:block;margin-top:10px;background:#3ddc84;color:#111113;text-align:center;padding:12px;border-radius:12px;font-weight:700;text-decoration:none}
 #histList{display:grid;gap:12px}
@@ -353,7 +354,7 @@ var MP_LINK   = "https://link.mercadopago.com.mx/7venstore"; // tu link de cobro
 var QR_URL    = "qr-oxxo.jpg";                               // URL de la imagen del QR de depósito OXXO
 var SUPABASE_URL = "https://gspwhmueszdaytwqsiqi.supabase.co";
 var SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzcHdobXVlc3pkYXl0d3FzaXFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjI1ODMsImV4cCI6MjEwODI5ODU4M30.L9vHkvWL-RIgtrfU6bpA18IB6DdaelqRgApwj6IQ238";
-var VERIFY_ID = false; // ← cámbialo a true cuando la función "verificar-jugador" esté lista en Supabase
+var VERIFY_ID = true;  // ← cámbialo a true cuando la función "verificar-jugador" esté lista en Supabase
 var PROMO_MIN = 500;   // bono de saldo: a partir de este monto...
 var PROMO_PCT = 3;     // ...se regala este % extra (pon 0 para quitar la promo). Debe coincidir con el SQL.
 var currentUser = null;
@@ -422,6 +423,11 @@ function verifyId(){
       verified = { id: id, name: j.name };
       pidName.className = "pid-name ok";
       pidName.innerHTML = '✅ Cuenta: <b>' + esc(j.name) + '</b><br><small>Si no es tu cuenta, revisa el ID antes de pagar.</small>';
+    } else if (j.ok && j.unavailable){
+      // RecargasAmérica no pudo dar el nombre ahora: no bloqueamos la venta
+      verified = { id: id, name: "" };
+      pidName.className = "pid-name warn";
+      pidName.textContent = "⚠️ No pudimos confirmar el nombre de la cuenta en este momento. Revisa bien tu ID antes de pagar.";
     } else {
       verified = { id: null, name: "" };
       pidName.className = "pid-name bad";
